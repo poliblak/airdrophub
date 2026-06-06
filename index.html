@@ -430,12 +430,20 @@ create policy "allow all" on claims for all using (true) with check (true);</div
 
 <script>
 // ── SUPABASE ──────────────────────────────────────────────
+// Credenciales preconfiguradas — no necesitas configurar nada
+const SB_URL = 'https://cdjokhaelmmizdomdmnk.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkam9raGFlbG1taXpkb21kbW5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjU5OTEsImV4cCI6MjA5NjMwMTk5MX0.WxR6BT6WzTUFGte6Xqb_5ztjYUJxQ7n23v0fkD6XsZE';
 const SBU='ah_sburl', SBK='ah_sbkey';
 let sb=null;
 function initSB(){
-  const u=localStorage.getItem(SBU), k=localStorage.getItem(SBK);
-  if(u&&k){ try{ sb=supabase.createClient(u,k); setSS('ok','Supabase'); document.getElementById('cfgU').value=u; document.getElementById('cfgK').value=k; }catch(e){ sb=null; setSS('err','Local'); } }
-  else setSS('err','Local');
+  try{
+    sb=supabase.createClient(SB_URL, SB_KEY);
+    setSS('ok','Supabase ✓');
+    // Also fill setup page fields for reference
+    const cu=document.getElementById('cfgU'), ck=document.getElementById('cfgK');
+    if(cu) cu.value=SB_URL;
+    if(ck) ck.value='(preconfigurado)';
+  }catch(e){ sb=null; setSS('err','Error'); }
 }
 function setSS(s,l){ const d=document.getElementById('sdot'); d.className='sync-dot '+(s==='ok'?'sd-ok':s==='syncing'?'sd-sync':'sd-err'); document.getElementById('slbl').textContent=l; }
 function saveSBCfg(){
@@ -695,36 +703,13 @@ function renderAll(){ renderDB(); const a=document.querySelector('.page.active')
 // Datos de ejemplo — serán reemplazados por tus datos reales del Google Sheet
 // Para cargar tus datos: agrégalos desde la UI o conéctate a Supabase
 function seedDemo(){
-  if(airdrops.length>0) return;
-  const now=new Date().toISOString();
-  airdrops=[
-    {id:uid(),name:'Hyperliquid',type:'DeFi',ecosystem:'Ethereum',explorer:'Chrome',status:'reclamado',points:12400,tokens:2450,premarket:2.1,soldTokens:2450,soldUsd:5145,invested:80,potential:0,profit:5065,dateStart:'2024-01-10',dateEnd:'2024-11-29',notes:'',createdAt:now,updatedAt:now},
-    {id:uid(),name:'Scroll',type:'L2',ecosystem:'Ethereum',explorer:'Brave',status:'reclamado',points:8100,tokens:320,premarket:0,soldTokens:320,soldUsd:840,invested:40,potential:0,profit:800,dateStart:'2024-03-01',dateEnd:'2024-10-19',notes:'',createdAt:now,updatedAt:now},
-    {id:uid(),name:'ZKSync Era',type:'Testnet',ecosystem:'Ethereum',explorer:'Chrome',status:'pendiente',points:21000,tokens:0,premarket:0,soldTokens:0,soldUsd:0,invested:120,potential:1500,profit:-120,dateStart:'2023-11-01',dateEnd:null,notes:'Esperando TGE',createdAt:now,updatedAt:now},
-    {id:uid(),name:'Jupiter',type:'DeFi',ecosystem:'Solana',explorer:'Brave',status:'reclamado',points:5600,tokens:1800,premarket:0.65,soldTokens:1800,soldUsd:1170,invested:30,potential:0,profit:1140,dateStart:'2024-01-01',dateEnd:'2024-01-31',notes:'',createdAt:now,updatedAt:now},
-    {id:uid(),name:'LayerZero',type:'Interoperabilidad',ecosystem:'Ethereum',explorer:'Chrome',status:'activo',points:18200,tokens:0,premarket:0,soldTokens:0,soldUsd:0,invested:200,potential:2000,profit:-200,dateStart:'2024-02-01',dateEnd:null,notes:'',createdAt:now,updatedAt:now},
-    {id:uid(),name:'Starknet',type:'L2',ecosystem:'Ethereum',explorer:'Firefox',status:'reclamado',points:9300,tokens:1200,premarket:1.2,soldTokens:1200,soldUsd:1440,invested:60,potential:0,profit:1380,dateStart:'2023-10-01',dateEnd:'2024-02-20',notes:'',createdAt:now,updatedAt:now},
-    {id:uid(),name:'Wormhole',type:'Interoperabilidad',ecosystem:'Solana',explorer:'Brave',status:'reclamado',points:7800,tokens:3100,premarket:0.85,soldTokens:3100,soldUsd:2635,invested:50,potential:0,profit:2585,dateStart:'2024-01-15',dateEnd:'2024-04-03',notes:'',createdAt:now,updatedAt:now},
-    {id:uid(),name:'Venom Network',type:'Testnet',ecosystem:'Venom',explorer:'Chrome',status:'activo',points:15000,tokens:0,premarket:0,soldTokens:0,soldUsd:0,invested:90,potential:800,profit:-90,dateStart:'2024-04-01',dateEnd:null,notes:'',createdAt:now,updatedAt:now},
-    {id:uid(),name:'Polygon zkEVM',type:'Testnet',ecosystem:'Matic',explorer:'Chrome',status:'pendiente',points:11000,tokens:0,premarket:0,soldTokens:0,soldUsd:0,invested:70,potential:600,profit:-70,dateStart:'2024-03-15',dateEnd:null,notes:'',createdAt:now,updatedAt:now},
-    {id:uid(),name:'Arbitrum Nova',type:'DEX',ecosystem:'Arbitrum',explorer:'Brave',status:'finalizado',points:6200,tokens:450,premarket:1.8,soldTokens:450,soldUsd:810,invested:35,potential:0,profit:775,dateStart:'2023-08-01',dateEnd:'2024-03-23',notes:'',createdAt:now,updatedAt:now},
-  ];
-  const aid0=airdrops[0].id, aid1=airdrops[1].id, aid3=airdrops[3].id, aid5=airdrops[5].id, aid6=airdrops[6].id;
-  claims=[
-    {id:uid(),airdropId:aid0,airdropName:'Hyperliquid',date:'2024-11-29',tokensClaimed:2450,tokensSold:2450,usdSold:5145,fee:25,net:5120,notes:'',createdAt:now},
-    {id:uid(),airdropId:aid1,airdropName:'Scroll',date:'2024-10-19',tokensClaimed:320,tokensSold:320,usdSold:840,fee:8,net:832,notes:'',createdAt:now},
-    {id:uid(),airdropId:aid3,airdropName:'Jupiter',date:'2024-01-31',tokensClaimed:1800,tokensSold:1800,usdSold:1170,fee:12,net:1158,notes:'',createdAt:now},
-    {id:uid(),airdropId:aid5,airdropName:'Starknet',date:'2024-02-20',tokensClaimed:1200,tokensSold:1200,usdSold:1440,fee:15,net:1425,notes:'',createdAt:now},
-    {id:uid(),airdropId:aid6,airdropName:'Wormhole',date:'2024-04-03',tokensClaimed:3100,tokensSold:3100,usdSold:2635,fee:20,net:2615,notes:'',createdAt:now},
-  ];
-  saveLocal();
+  // Supabase es la fuente de verdad — sin datos de ejemplo
 }
 
 // ── INIT ──────────────────────────────────────────────────
 async function init(){
   initSB();
   await loadAll();
-  seedDemo();
   renderDB();
 }
 init();
