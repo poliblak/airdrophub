@@ -856,20 +856,8 @@ function renderVest(){
   el.innerHTML=vestings.map(v=>{
     const total=v.dates?v.dates.length:0;
     const claimed=v.dates?v.dates.filter(d=>d.claimed).length:0;
-    return `<div class="vest-item">
-      <div class="vest-header">
-        <div><div class="vest-name">${v.airdropName}</div><div style="font-size:10px;color:var(--tm);margin-top:2px">${claimed}/${total} fechas reclamadas</div></div>
-        <div class="acell"><button class="ibtn" onclick="openVestModal(vestings.find(x=>x.id==='${v.id}'))"><i class="ti ti-edit"></i></button><button class="ibtn del" onclick="deleteVest('${v.id}')"><i class="ti ti-trash"></i></button></div>
-      </div>
-      <div class="vest-dates">
-        ${(v.dates||[]).map((d,i)=>`<div class="vest-date-row">
-          <span class="vest-date-lbl">Fecha ${i+1}</span>
-          <span class="vest-date-val">${fd(d.date)}</span>
-          <span class="vest-date-tok">${d.tokens?fn(d.tokens)+' tokens':'—'}</span>
-          <span class="vest-date-status">${d.claimed?`<span class="badge b-reclamado"><span class="dot" style="background:var(--gr)"></span>Reclamado</span>`:`<span class="badge b-pendiente">Pendiente</span>`}</span>
-        </div>`).join('')}
-      </div>
-    </div>`;
+    const datesHtml=(v.dates||[]).map((d,i)=>'<div class="vest-date-row"><span class="vest-date-lbl">Fecha '+(i+1)+'</span><span class="vest-date-val">'+fd(d.date)+'</span><span class="vest-date-tok">'+(d.tokens?fn(d.tokens)+' tokens':'—')+'</span><span class="vest-date-status">'+(d.claimed?'<span class="badge b-reclamado"><span class="dot" style="background:var(--gr)"></span>Reclamado</span>':'<span class="badge b-pendiente">Pendiente</span>')+'</span></div>').join('');
+    return '<div class="vest-item"><div class="vest-header"><div><div class="vest-name">'+v.airdropName+'</div><div style="font-size:10px;color:var(--tm);margin-top:2px">'+claimed+'/'+total+' fechas reclamadas</div></div><div class="acell"><button class="ibtn" onclick="openVestModal(vestings.find(x=>x.id===''+v.id+''))"><i class="ti ti-edit"></i></button><button class="ibtn del" onclick="deleteVest(''+v.id+'')"><i class="ti ti-trash"></i></button></div></div><div class="vest-dates">'+datesHtml+'</div></div>';
   }).join('');
 }
 
@@ -910,10 +898,8 @@ function renderCal(){
     else{dayNum=i-startDay+1;dateStr=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(dayNum).padStart(2,'0');}
     const isToday=!isOther&&today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===dayNum;
     const evs=dateStr&&evMap[dateStr]?evMap[dateStr]:[];
-    html+=`<div class="cal-day${isOther?' other-month':''}${isToday?' today':''}">
-      <div class="cal-day-num">${dayNum}</div>
-      ${evs.map(e=>`<div class="cal-event cal-ev-${e.type==='end'?'end':e.type==='claim'?'claim':'vest'}" title="${e.name}">${e.name}</div>`).join('')}
-    </div>`;
+    const evHtml=evs.map(function(e){var cls=e.type==='end'?'cal-ev-end':e.type==='claim'?'cal-ev-claim':'cal-ev-vest';return '<div class="cal-event '+cls+'" title="'+e.name+'">'+e.name+'</div>';}).join('');
+    html+='<div class="cal-day'+(isOther?' other-month':'')+(isToday?' today':'')+'"><div class="cal-day-num">'+dayNum+'</div>'+evHtml+'</div>';
   }
   if(totalCells-startDay-daysInMonth>=7){
     // trim last row if all other month
@@ -961,7 +947,7 @@ function fd(d){if(!d)return '—';try{return new Date(d+'T12:00:00').toLocaleDat
 function sbadge(s){
   const cls={activo:'b-activo',pendiente:'b-pendiente',finalizado:'b-finalizado',reclamado:'b-reclamado'};
   const dots={activo:'var(--bl)',pendiente:'var(--yw)',finalizado:'var(--rd)',reclamado:'var(--gr)'};
-  return `<span class="badge ${cls[s]||'b-pendiente'}"><span class="dot" style="background:${dots[s]||'var(--tm)}"></span>${s}</span>`;
+  return `<span class="badge ${cls[s]||'b-pendiente'}"><span class="dot" style="background:${dots[s]||'var(--tm)'}"></span>${s}</span>`;
 }
 function etag(eco){
   if(!eco) return '<span style="color:var(--tm);font-size:11px">—</span>';
