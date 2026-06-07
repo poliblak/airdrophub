@@ -13,14 +13,13 @@
   --border:#2a2e36;--blight:#343940;
   --tp:#e8e4de;--ts:#9a9590;--tm:#5a5650;
   --acc:#c8651a;--accs:rgba(200,101,26,0.15);--accg:rgba(200,101,26,0.07);
-  --gr:#4caf7d;--grb:rgba(76,175,125,0.12);
+  --gr:#22c55e;--grb:rgba(34,197,94,0.12);
   --rd:#e05252;--rdb:rgba(224,82,82,0.12);
-  --yw:#d4943a;--ywb:rgba(212,148,58,0.12);
+  --yw:#eab308;--ywb:rgba(234,179,8,0.12);
+  --bl:#3b82f6;--blb:rgba(59,130,246,0.12);
   --pu:#8b72be;--pub:rgba(139,114,190,0.12);
-  --bl:#5b8fc4;--blb:rgba(91,143,196,0.12);
   --r:10px;--rs:6px;
-  --mono:'Space Mono',monospace;--body:'DM Sans',sans-serif;
-  --sw:215px;
+  --mono:'Space Mono',monospace;--body:'DM Sans',sans-serif;--sw:220px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--body);background:var(--bg-deep);color:var(--tp);min-height:100vh;overflow-x:hidden}
@@ -30,166 +29,198 @@ body{font-family:var(--body);background:var(--bg-deep);color:var(--tp);min-heigh
 .layout{display:flex;min-height:100vh}
 .sidebar{width:var(--sw);background:var(--bg-base);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .25s}
 .main{margin-left:var(--sw);flex:1;min-height:100vh}
-.logo-area{padding:18px 16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.logo-icon{width:38px;height:38px;background:var(--acc);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 0 18px rgba(200,101,26,0.35)}
-.logo-text{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:-.02em}
-.logo-sub{font-size:10px;color:var(--tm);letter-spacing:.05em;text-transform:uppercase}
-.nav{padding:10px 8px;flex:1;overflow-y:auto}
-.nav-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--tm);padding:10px 8px 4px;font-weight:600}
-.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--rs);font-size:13px;color:var(--ts);cursor:pointer;margin-bottom:1px;transition:all .15s;border:1px solid transparent}
+.logo-area{padding:14px 14px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;border-radius:8px;overflow:hidden;flex-shrink:0}
+.logo-icon img{width:100%;height:100%;object-fit:cover}
+.logo-text{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:-.02em}
+.logo-sub{font-size:9px;color:var(--tm);letter-spacing:.05em;text-transform:uppercase}
+.nav{padding:8px 8px;flex:1;overflow-y:auto}
+.nav-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--tm);padding:8px 8px 3px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--rs);font-size:12px;color:var(--ts);cursor:pointer;margin-bottom:1px;transition:all .15s;border:1px solid transparent}
 .nav-item:hover{background:var(--bg-hover);color:var(--tp)}
 .nav-item.active{background:var(--accs);color:var(--acc);border-color:rgba(200,101,26,.25)}
-.nav-item i{font-size:15px;width:16px;flex-shrink:0}
-.nav-badge{margin-left:auto;background:var(--bg-card2);color:var(--tm);font-size:10px;padding:1px 6px;border-radius:10px;font-family:var(--mono)}
-.sfooter{padding:12px 16px;border-top:1px solid var(--border)}
-.sver{font-size:10px;color:var(--tm);font-family:var(--mono)}
-.topbar{padding:13px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg-base);position:sticky;top:0;z-index:50}
+.nav-item i{font-size:14px;width:15px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--bg-card2);color:var(--tm);font-size:9px;padding:1px 5px;border-radius:10px;font-family:var(--mono)}
+.sfooter{padding:10px 14px;border-top:1px solid var(--border)}
+.sver{font-size:9px;color:var(--tm);font-family:var(--mono)}
+.topbar{padding:11px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg-base);position:sticky;top:0;z-index:50}
 .tbl{display:flex;align-items:center;gap:10px}
-.tbr{display:flex;gap:8px;align-items:center}
-.t-title{font-size:15px;font-weight:600}
-.sync-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;transition:background .3s}
+.tbr{display:flex;gap:7px;align-items:center}
+.t-title{font-size:14px;font-weight:600}
+.sync-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px}
 .sd-ok{background:var(--gr)}.sd-err{background:var(--rd)}.sd-sync{background:var(--yw);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--rs);font-size:13px;cursor:pointer;font-weight:500;border:1px solid var(--border);background:var(--bg-card2);color:var(--ts);transition:all .15s;font-family:var(--body)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--rs);font-size:12px;cursor:pointer;font-weight:500;border:1px solid var(--border);background:var(--bg-card2);color:var(--ts);transition:all .15s;font-family:var(--body)}
 .btn:hover{background:var(--bg-hover);color:var(--tp)}
 .btn-acc{background:var(--acc);color:#fff;border-color:var(--acc)}
 .btn-acc:hover{background:#b85a17}
-.btn i{font-size:14px}
-.srch-wrap{display:flex;align-items:center;gap:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rs);padding:6px 12px}
-.srch-wrap input{background:none;border:none;outline:none;font-size:13px;color:var(--tp);width:160px;font-family:var(--body)}
+.btn-sm{padding:4px 9px;font-size:11px}
+.btn i{font-size:13px}
+.srch-wrap{display:flex;align-items:center;gap:7px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rs);padding:5px 10px}
+.srch-wrap input{background:none;border:none;outline:none;font-size:12px;color:var(--tp);width:150px;font-family:var(--body)}
 .srch-wrap input::placeholder{color:var(--tm)}
-.page{display:none;padding:20px}
+.page{display:none;padding:18px}
 .page.active{display:block}
-.sgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
-.scard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;position:relative;overflow:hidden}
-.scard::before{content:'';position:absolute;top:0;right:0;width:48px;height:48px;background:var(--accg);border-radius:0 var(--r) 0 48px}
-.slbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;font-weight:600}
-.sval{font-size:20px;font-weight:700;font-family:var(--mono)}
-.ssub{font-size:11px;margin-top:3px;color:var(--tm)}
-.up{color:var(--gr)}.dn{color:var(--rd)}.yw{color:var(--yw)}
-.glgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.glcard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;display:flex;align-items:center;gap:12px}
-.glicon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.glicon-g{background:var(--grb);border:1px solid rgba(76,175,125,.2)}
+.sgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:14px}
+.scard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:13px 14px;position:relative;overflow:hidden}
+.scard::before{content:'';position:absolute;top:0;right:0;width:44px;height:44px;background:var(--accg);border-radius:0 var(--r) 0 44px}
+.slbl{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;font-weight:600}
+.sval{font-size:18px;font-weight:700;font-family:var(--mono)}
+.ssub{font-size:10px;margin-top:2px;color:var(--tm)}
+.up{color:var(--gr)}.dn{color:var(--rd)}.yw{color:var(--yw)}.bl{color:var(--bl)}
+.glgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.glcard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;display:flex;align-items:center;gap:10px}
+.glicon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.glicon-g{background:var(--grb);border:1px solid rgba(34,197,94,.2)}
 .glicon-r{background:var(--rdb);border:1px solid rgba(224,82,82,.2)}
 .glinfo{flex:1;min-width:0}
-.gllbl{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);font-weight:600;margin-bottom:2px}
-.glname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.glval{font-size:16px;font-weight:700;font-family:var(--mono);flex-shrink:0}
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:16px}
-.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.card-tt{font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em}
-.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px}
-.r3{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px;margin-bottom:15px}
-.rw{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:15px}
-.brow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-.blbl{font-size:11px;color:var(--ts);width:78px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btrack{flex:1;height:5px;background:var(--bg-card2);border-radius:3px;overflow:hidden}
-.bfill{height:5px;border-radius:3px;transition:width .5s}
-.bval{font-size:11px;font-family:var(--mono);width:62px;text-align:right;flex-shrink:0}
-.mchart{display:flex;align-items:flex-end;gap:3px;height:78px}
+.gllbl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);font-weight:600;margin-bottom:1px}
+.glname{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.glval{font-size:14px;font-weight:700;font-family:var(--mono);flex-shrink:0}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.card-tt{font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px}
+.r3{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-bottom:13px}
+.r4{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:10px;margin-bottom:13px}
+.rw{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:13px}
+.brow{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.blbl{font-size:11px;color:var(--ts);width:76px;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btrack{flex:1;height:4px;background:var(--bg-card2);border-radius:3px;overflow:hidden}
+.bfill{height:4px;border-radius:3px;transition:width .5s}
+.bval{font-size:10px;font-family:var(--mono);width:58px;text-align:right;flex-shrink:0}
+.mchart{display:flex;align-items:flex-end;gap:2px;height:72px}
 .mcol{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
 .mbar{width:100%;border-radius:2px 2px 0 0;min-height:2px}
-.mlbl{font-size:9px;color:var(--tm);font-family:var(--mono)}
-.t10item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.mlbl{font-size:8px;color:var(--tm);font-family:var(--mono)}
+.t10item{display:flex;align-items:flex-start;gap:7px;padding:6px 0;border-bottom:1px solid var(--border)}
 .t10item:last-child{border-bottom:none}
-.t10rank{font-size:10px;font-family:var(--mono);color:var(--tm);width:16px;text-align:center;flex-shrink:0}
-.t10name{font-size:12px;flex:1;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.t10eco{font-size:10px;color:var(--tm);flex-shrink:0}
-.t10val{font-size:12px;font-family:var(--mono);font-weight:700;flex-shrink:0}
+.t10rank{font-size:10px;font-family:var(--mono);color:var(--tm);width:14px;text-align:center;flex-shrink:0;padding-top:1px}
+.t10body{flex:1;min-width:0}
+.t10name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t10eco{font-size:10px;color:var(--tm);margin-top:1px}
+.t10val{font-size:12px;font-family:var(--mono);font-weight:700;flex-shrink:0;padding-top:1px}
 .srow{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
 .srow:last-child{border-bottom:none}
-.twrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
-.tctrl{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.ftabs{display:flex;gap:4px;flex-wrap:wrap}
-.ftab{padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;color:var(--tm);border:1px solid transparent;transition:all .15s}
+.twrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.tctrl{padding:10px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
+.ftabs{display:flex;gap:3px;flex-wrap:wrap}
+.ftab{padding:3px 10px;border-radius:20px;font-size:11px;cursor:pointer;color:var(--tm);border:1px solid transparent;transition:all .15s}
 .ftab.active{background:var(--accs);color:var(--acc);border-color:rgba(200,101,26,.3)}
 .ftab:hover:not(.active){background:var(--bg-hover);color:var(--ts)}
 .tscroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{padding:9px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);font-weight:700;text-align:left;border-bottom:1px solid var(--border);background:var(--bg-base);white-space:nowrap}
+thead th{padding:8px 11px;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);font-weight:700;text-align:left;border-bottom:1px solid var(--border);background:var(--bg-base);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer}
 tbody tr:hover{background:var(--bg-hover)}
 tbody tr:last-child{border-bottom:none}
-tbody td{padding:10px 12px;vertical-align:middle}
-.tdn{font-weight:600;font-size:13px}
+tbody td{padding:9px 11px;vertical-align:middle}
+.tdn{font-weight:600;font-size:12px}
 .tdm{font-family:var(--mono);font-size:11px}
-.tdd{color:var(--tm);font-size:12px}
-.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:500}
-.ba{background:var(--grb);color:var(--gr)}
-.bp{background:var(--ywb);color:var(--yw)}
-.be{background:var(--bg-card2);color:var(--tm);border:1px solid var(--border)}
-.bc{background:var(--pub);color:var(--pu)}
-.bt{background:var(--blb);color:var(--bl);border-radius:var(--rs)}
+.tdd{color:var(--tm);font-size:11px}
+.badge{display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:20px;font-size:10px;font-weight:600}
+/* STATUS COLORS: activo=blue, pendiente=yellow, finalizado=red, reclamado=green */
+.b-activo{background:var(--blb);color:var(--bl)}
+.b-pendiente{background:var(--ywb);color:var(--yw)}
+.b-finalizado{background:var(--rdb);color:var(--rd)}
+.b-reclamado{background:var(--grb);color:var(--gr)}
+.bt{background:rgba(91,143,196,.15);color:#82b4e8;border-radius:var(--rs)}
+/* ECOSYSTEM COLORS — brand accurate */
+.eco-eth{background:rgba(98,126,234,.15);color:#627eea} /* Ethereum blue */
+.eco-sol{background:rgba(153,69,255,.15);color:#9945ff} /* Solana purple */
+.eco-arb{background:rgba(40,160,240,.15);color:#28a0f0} /* Arbitrum blue */
+.eco-base{background:rgba(0,82,255,.15);color:#0052ff}  /* Base blue */
+.eco-bsc{background:rgba(243,186,47,.15);color:#f3ba2f} /* BSC yellow */
+.eco-matic{background:rgba(130,71,229,.15);color:#8247e5} /* Polygon/Matic purple */
+.eco-cos{background:rgba(111,183,214,.15);color:#6fb7d6}  /* Cosmos */
+.eco-sui{background:rgba(78,186,255,.15);color:#4ebaff}   /* Sui blue */
+.eco-apt{background:rgba(0,164,120,.15);color:#00a478}    /* Aptos teal */
+.eco-ven{background:rgba(98,200,132,.15);color:#62c884}   /* Venom green */
+.eco-other{background:var(--bg-card2);color:var(--tm)}
 .beco{border-radius:var(--rs)}
-.eeth{background:rgba(139,114,190,.15);color:#a78bfa}
-.esol{background:rgba(91,143,196,.15);color:#82b4e8}
-.earb{background:rgba(76,130,175,.12);color:#5da0d0}
-.ecos{background:rgba(76,175,125,.12);color:#4caf7d}
-.ematic{background:rgba(130,71,229,.15);color:#9f6fea}
-.ebsc{background:rgba(240,185,11,.12);color:#c9980a}
-.ebase{background:rgba(0,82,255,.12);color:#4d7fff}
-.eother{background:var(--bg-card2);color:var(--tm)}
-.dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:3px}
-.dg{background:var(--gr)}.dy{background:var(--yw)}.dp{background:var(--pu)}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.dot{width:5px;height:5px;border-radius:50%;display:inline-block;margin-right:2px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
 .overlay.open{display:flex}
-.modal{background:var(--bg-card);border:1px solid var(--blight);border-radius:14px;width:93%;max-width:580px;max-height:93vh;overflow-y:auto;padding:22px}
-.mhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.mtt{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
-.mtt i{color:var(--acc);font-size:17px}
-.mx{background:none;border:none;color:var(--tm);font-size:20px;cursor:pointer;padding:4px;border-radius:6px;display:flex}
+.modal{background:var(--bg-card);border:1px solid var(--blight);border-radius:14px;width:93%;max-width:580px;max-height:93vh;overflow-y:auto;padding:20px}
+.mhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.mtt{font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px}
+.mtt i{color:var(--acc);font-size:16px}
+.mx{background:none;border:none;color:var(--tm);font-size:18px;cursor:pointer;padding:3px;border-radius:5px;display:flex}
 .mx:hover{color:var(--tp);background:var(--bg-hover)}
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .ff{grid-column:1/-1}
-.fgrp{display:flex;flex-direction:column;gap:4px}
-.flbl{font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.07em}
-.finp,.fsel,.ftxt{background:var(--bg-base);border:1px solid var(--blight);border-radius:var(--rs);padding:9px 12px;font-size:13px;color:var(--tp);font-family:var(--body);outline:none;transition:border-color .15s;width:100%}
+.fgrp{display:flex;flex-direction:column;gap:3px}
+.flbl{font-size:9px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.07em}
+.finp,.fsel,.ftxt{background:var(--bg-base);border:1px solid var(--blight);border-radius:var(--rs);padding:8px 11px;font-size:12px;color:var(--tp);font-family:var(--body);outline:none;transition:border-color .15s;width:100%}
 .finp:focus,.fsel:focus,.ftxt:focus{border-color:var(--acc)}
 .fsel option{background:var(--bg-card)}
-.ftxt{resize:vertical;min-height:58px}
-.fdiv{grid-column:1/-1;border-top:1px solid var(--border);margin:3px 0}
-.fsec{grid-column:1/-1;font-size:11px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;gap:5px;margin-top:3px}
-.factions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;grid-column:1/-1}
-.fhint{font-size:10px;color:var(--tm)}
-.autocalc{background:var(--bg-base);border:1px solid var(--border);border-radius:var(--rs);padding:9px 12px;font-family:var(--mono);font-size:13px;font-weight:700}
-.acell{display:flex;gap:3px}
-.ibtn{background:none;border:1px solid transparent;border-radius:5px;color:var(--tm);cursor:pointer;padding:3px 5px;font-size:13px;transition:all .15s;display:flex;align-items:center}
+.ftxt{resize:vertical;min-height:55px}
+.fdiv{grid-column:1/-1;border-top:1px solid var(--border);margin:2px 0}
+.fsec{grid-column:1/-1;font-size:10px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;gap:4px;margin-top:2px}
+.factions{display:flex;gap:7px;justify-content:flex-end;margin-top:12px;grid-column:1/-1}
+.fhint{font-size:9px;color:var(--tm)}
+.autocalc{background:var(--bg-base);border:1px solid var(--border);border-radius:var(--rs);padding:8px 11px;font-family:var(--mono);font-size:12px;font-weight:700}
+.acell{display:flex;gap:2px}
+.ibtn{background:none;border:1px solid transparent;border-radius:4px;color:var(--tm);cursor:pointer;padding:3px 4px;font-size:12px;transition:all .15s;display:flex;align-items:center}
 .ibtn:hover{background:var(--bg-hover);border-color:var(--border);color:var(--tp)}
 .ibtn.del:hover{background:var(--rdb);border-color:var(--rd);color:var(--rd)}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--bg-card2);border:1px solid var(--blight);border-radius:var(--rs);padding:10px 16px;font-size:13px;z-index:999;transform:translateY(70px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:8px;max-width:300px}
+.ibtn.grn:hover{background:var(--grb);border-color:var(--gr);color:var(--gr)}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--bg-card2);border:1px solid var(--blight);border-radius:var(--rs);padding:9px 14px;font-size:12px;z-index:999;transform:translateY(70px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:7px;max-width:280px}
 .toast.show{transform:translateY(0);opacity:1}
-.toast i{font-size:16px}
-.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px}
-.ditem{background:var(--bg-base);border-radius:var(--rs);padding:9px 11px}
-.dlbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
-.dval{font-size:13px;font-weight:500;font-family:var(--mono)}
-.empty{display:flex;flex-direction:column;align-items:center;padding:36px 20px;color:var(--tm);gap:9px}
-.empty i{font-size:30px}
-.empty p{font-size:13px}
-.setup-card{background:var(--bg-card);border:1px solid var(--acc);border-radius:var(--r);padding:20px;margin-bottom:18px}
-.setup-card.neutral{border-color:var(--border)}
-.setup-card h3{color:var(--acc);font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.setup-card.neutral h3{color:var(--ts)}
-.setup-card p{font-size:13px;color:var(--ts);margin-bottom:10px;line-height:1.65}
-.setup-card a{color:var(--bl)}
-.irow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-.irow input{flex:1;background:var(--bg-base);border:1px solid var(--blight);border-radius:var(--rs);padding:8px 12px;font-size:12px;color:var(--tp);font-family:var(--mono);outline:none}
-.irow input:focus{border-color:var(--acc)}
-.codeblock{background:var(--bg-deep);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;font-family:var(--mono);font-size:11px;color:var(--ts);white-space:pre-wrap;margin-bottom:10px;line-height:1.75;overflow-x:auto}
+.toast i{font-size:14px}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.ditem{background:var(--bg-base);border-radius:var(--rs);padding:8px 10px}
+.dlbl{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.dval{font-size:12px;font-weight:500;font-family:var(--mono)}
+.empty{display:flex;flex-direction:column;align-items:center;padding:32px 20px;color:var(--tm);gap:8px}
+.empty i{font-size:28px}
+.empty p{font-size:12px}
+/* CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-head{font-size:10px;text-align:center;color:var(--tm);padding:4px 0;font-weight:600}
+.cal-day{background:var(--bg-card2);border:1px solid var(--border);border-radius:6px;min-height:72px;padding:4px;cursor:default}
+.cal-day.today{border-color:var(--acc)}
+.cal-day.other-month{opacity:.3}
+.cal-day-num{font-size:10px;font-family:var(--mono);color:var(--tm);margin-bottom:3px}
+.cal-event{font-size:9px;padding:2px 4px;border-radius:3px;margin-bottom:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer}
+.cal-ev-end{background:var(--rdb);color:var(--rd)}
+.cal-ev-claim{background:var(--grb);color:var(--gr)}
+.cal-ev-vest{background:var(--pub);color:var(--pu)}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-title{font-size:14px;font-weight:600}
+.cal-legend{display:flex;gap:12px;margin-bottom:10px}
+.cal-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ts)}
+/* VESTING */
+.vest-item{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:8px}
+.vest-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.vest-name{font-size:13px;font-weight:600}
+.vest-dates{display:flex;flex-direction:column;gap:5px}
+.vest-date-row{display:flex;align-items:center;gap:8px;padding:5px 8px;background:var(--bg-base);border-radius:5px}
+.vest-date-lbl{font-size:11px;color:var(--tm);width:80px;flex-shrink:0}
+.vest-date-val{font-size:11px;font-family:var(--mono);flex:1}
+.vest-date-tok{font-size:11px;font-family:var(--mono);color:var(--ts)}
+.vest-date-status{flex-shrink:0}
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.filter-bar select{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rs);padding:5px 10px;font-size:12px;color:var(--tp);font-family:var(--body);outline:none}
+.filter-bar select:focus{border-color:var(--acc)}
+.filter-lbl{font-size:11px;color:var(--tm);font-weight:600}
+/* NEXT AIRDROPS */
+.next-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:5px}
+.next-name{flex:1;font-size:12px;font-weight:600}
 @media(max-width:800px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
   .main{margin-left:0}
   .sgrid{grid-template-columns:1fr 1fr}
-  .r2,.r3,.rw,.glgrid{grid-template-columns:1fr}
+  .r2,.r3,.r4,.rw,.glgrid{grid-template-columns:1fr}
   .fg{grid-template-columns:1fr}
-  .page{padding:13px}
-  .topbar{padding:10px 13px}
+  .page{padding:12px}
+  .topbar{padding:9px 12px}
   .mbtn{display:flex!important}
   #sov{display:block}
 }
-.mbtn{display:none;background:none;border:none;color:var(--ts);font-size:22px;cursor:pointer;padding:2px}
+.mbtn{display:none;background:none;border:none;color:var(--ts);font-size:20px;cursor:pointer;padding:2px}
 #sov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
 </style>
 </head>
@@ -199,7 +230,7 @@ tbody td{padding:10px 12px;vertical-align:middle}
 <div class="layout">
 <aside class="sidebar" id="sidebar">
   <div class="logo-area">
-    <div class="logo-icon">🪂</div>
+    <div class="logo-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjE2IiBmaWxsPSIjYzg2NTFhIi8+CiAgPGVsbGlwc2UgY3g9IjUwIiBjeT0iNjIiIHJ4PSIzMCIgcnk9IjI4IiBmaWxsPSIjMjUyMjIwIi8+CiAgPGVsbGlwc2UgY3g9IjUwIiBjeT0iNjAiIHJ4PSIyNCIgcnk9IjIyIiBmaWxsPSIjM2EzNTMwIi8+CiAgPGVsbGlwc2UgY3g9IjQyIiBjeT0iNjAiIHJ4PSI4IiByeT0iMTAiIGZpbGw9IiNlOGUwZDAiLz4KICA8ZWxsaXBzZSBjeD0iNTgiIGN5PSI2MCIgcng9IjgiIHJ5PSIxMCIgZmlsbD0iI2U4ZTBkMCIvPgogIDxlbGxpcHNlIGN4PSI0MiIgY3k9IjYyIiByeD0iNSIgcnk9IjciIGZpbGw9IiNjOGI4OWEiLz4KICA8ZWxsaXBzZSBjeD0iNTgiIGN5PSI2MiIgcng9IjUiIHJ5PSI3IiBmaWxsPSIjYzhiODlhIi8+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI2NSIgcj0iNSIgZmlsbD0iIzFhMTAxMCIvPgogIDxlbGxpcHNlIGN4PSI1MCIgY3k9IjY3IiByeD0iMy41IiByeT0iMi41IiBmaWxsPSIjMmQxYTFhIi8+CiAgPHJlY3QgeD0iMjAiIHk9IjI4IiB3aWR0aD0iNjAiIGhlaWdodD0iMjQiIHJ4PSIxMiIgZmlsbD0iIzFlMWUxZSIvPgogIDxyZWN0IHg9IjIwIiB5PSIyOCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjE2IiByeD0iMTIiIGZpbGw9IiMyYTJhMmEiLz4KICA8cmVjdCB4PSIyNiIgeT0iMjMiIHdpZHRoPSI0OCIgaGVpZ2h0PSIxMCIgcng9IjUiIGZpbGw9IiMzMzMiLz4KICA8cmVjdCB4PSIzOCIgeT0iMjUiIHdpZHRoPSIyNCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iIzQ0NCIvPgogIDxyZWN0IHg9IjM4IiB5PSIyMyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjUiIHJ4PSIyLjUiIGZpbGw9IiNlOGUwZDAiLz4KICA8ZWxsaXBzZSBjeD0iNTAiIGN5PSIyNSIgcng9IjEwIiByeT0iMyIgZmlsbD0iI2U4ZTBkMCIvPgogIDxyZWN0IHg9IjQyIiB5PSIyMiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjUiIHJ4PSIyIiBmaWxsPSIjZThlMGQwIi8+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSIyNCIgcj0iMiIgZmlsbD0iIzFhMWExYSIvPgogIDxyZWN0IHg9IjQ2IiB5PSIyMiIgd2lkdGg9IjgiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iI2M4NjUxYSIgb3BhY2l0eT0iMC44Ii8+Cjwvc3ZnPg==" alt="AirdropHub"></div>
     <div><div class="logo-text">AirdropHub</div><div class="logo-sub">Tracker Pro</div></div>
   </div>
   <nav class="nav">
@@ -207,15 +238,18 @@ tbody td{padding:10px 12px;vertical-align:middle}
     <div class="nav-item active" onclick="goPage('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
     <div class="nav-item" onclick="goPage('airdrops',this)"><i class="ti ti-list"></i>Mis Airdrops<span class="nav-badge" id="navCnt">0</span></div>
     <div class="nav-item" onclick="openAM(null)"><i class="ti ti-plus"></i>Nuevo Airdrop</div>
-    <div class="nav-lbl">Finanzas</div>
+    <div class="nav-lbl">Seguimiento</div>
+    <div class="nav-item" onclick="goPage('calendar',this)"><i class="ti ti-calendar"></i>Calendario</div>
     <div class="nav-item" onclick="goPage('claims',this)"><i class="ti ti-calendar-check"></i>Reclamados</div>
     <div class="nav-item" onclick="openCM(null)"><i class="ti ti-coins"></i>Registrar Reclamo</div>
+    <div class="nav-item" onclick="goPage('vesting',this)"><i class="ti ti-clock-dollar"></i>Vesting</div>
+    <div class="nav-lbl">Pipeline</div>
+    <div class="nav-item" onclick="goPage('next',this)"><i class="ti ti-rocket"></i>Próximos Airdrops</div>
+    <div class="nav-item" onclick="openNextModal(null)"><i class="ti ti-plus"></i>Agregar Próximo</div>
     <div class="nav-lbl">Análisis</div>
     <div class="nav-item" onclick="goPage('stats',this)"><i class="ti ti-chart-bar"></i>Estadísticas</div>
-    <div class="nav-lbl">Configuración</div>
-    <div class="nav-item" onclick="goPage('setup',this)"><i class="ti ti-cloud"></i>Supabase Sync</div>
   </nav>
-  <div class="sfooter"><div class="sver">AirdropHub v2.0</div></div>
+  <div class="sfooter"><div class="sver">AirdropHub v3.0</div></div>
 </aside>
 <div class="main">
   <div class="topbar">
@@ -224,38 +258,45 @@ tbody td{padding:10px 12px;vertical-align:middle}
       <span class="t-title" id="topTitle">Dashboard</span>
     </div>
     <div class="tbr">
-      <span id="syncSt" style="font-size:12px;color:var(--tm);display:flex;align-items:center"><span class="sync-dot sd-err" id="sdot"></span><span id="slbl">Local</span></span>
-      <div class="srch-wrap"><i class="ti ti-search" style="font-size:13px;color:var(--tm)"></i><input id="srch" placeholder="Buscar..." oninput="onSearch(this.value)"></div>
+      <span id="syncSt" style="font-size:11px;color:var(--tm);display:flex;align-items:center"><span class="sync-dot sd-err" id="sdot"></span><span id="slbl">Local</span></span>
+      <div class="srch-wrap"><i class="ti ti-search" style="font-size:12px;color:var(--tm)"></i><input id="srch" placeholder="Buscar..." oninput="onSearch(this.value)"></div>
       <button class="btn btn-acc" onclick="openAM(null)"><i class="ti ti-plus"></i>Nuevo</button>
     </div>
   </div>
 
   <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
+    <div class="filter-bar">
+      <span class="filter-lbl">Filtrar:</span>
+      <select id="db-year" onchange="renderDB()"><option value="">Todos los años</option></select>
+      <select id="db-month" onchange="renderDB()"><option value="">Todos los meses</option><option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option><option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option><option value="07">Julio</option><option value="08">Agosto</option><option value="09">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select>
+      <button class="btn btn-sm" onclick="clearDBFilter()"><i class="ti ti-x"></i>Limpiar</button>
+    </div>
     <div class="sgrid">
-      <div class="scard"><div class="slbl">Profit Total</div><div class="sval up" id="s-pft">$0</div><div class="ssub" id="s-pft-s">0 finalizados</div></div>
-      <div class="scard"><div class="slbl">Total Invertido</div><div class="sval" id="s-inv">$0</div><div class="ssub" id="s-inv-s">0 airdrops</div></div>
-      <div class="scard"><div class="slbl">Monto Recibido</div><div class="sval" id="s-rcv">$0</div><div class="ssub">vendido en USD</div></div>
-      <div class="scard"><div class="slbl">Potencial Total</div><div class="sval yw" id="s-pot">$0</div><div class="ssub" id="s-pot-s">proyección</div></div>
-      <div class="scard"><div class="slbl">ROI Promedio</div><div class="sval up" id="s-roi">0×</div><div class="ssub">retorno promedio</div></div>
+      <div class="scard"><div class="slbl">Profit Total</div><div class="sval up" id="s-pft">$0</div><div class="ssub" id="s-pft-s"></div></div>
+      <div class="scard"><div class="slbl">Total Invertido</div><div class="sval" id="s-inv">$0</div><div class="ssub" id="s-inv-s"></div></div>
+      <div class="scard"><div class="slbl">Airdrop Total</div><div class="sval" id="s-rcv">$0</div><div class="ssub">vendido en USD</div></div>
+      <div class="scard"><div class="slbl">Potencial Total</div><div class="sval yw" id="s-pot">$0</div><div class="ssub" id="s-pot-s"></div></div>
+      <div class="scard"><div class="slbl">ROI Promedio</div><div class="sval up" id="s-roi">0×</div><div class="ssub">retorno</div></div>
     </div>
     <div class="glgrid">
       <div class="glcard"><div class="glicon glicon-g">🏆</div><div class="glinfo"><div class="gllbl">Top Gainer</div><div class="glname" id="gl-n">—</div></div><div class="glval up" id="gl-v">—</div></div>
       <div class="glcard"><div class="glicon glicon-r">📉</div><div class="glinfo"><div class="gllbl">Top Loser</div><div class="glname" id="ll-n">—</div></div><div class="glval dn" id="ll-v">—</div></div>
     </div>
-    <div class="r3">
+    <div class="r4">
       <div class="card"><div class="card-hd"><span class="card-tt">🏅 Top 10 Airdrops</span></div><div id="top10"></div></div>
       <div class="card"><div class="card-hd"><span class="card-tt">Por Estado</span></div><div id="bySt"></div></div>
       <div class="card"><div class="card-hd"><span class="card-tt">Por Tipo</span></div><div id="byTp"></div></div>
+      <div class="card"><div class="card-hd"><span class="card-tt">Profit por Tipo</span></div><div id="profitByType"></div></div>
     </div>
     <div class="rw">
       <div class="card"><div class="card-hd"><span class="card-tt">Profit por Ecosistema</span></div><div id="ecoC"></div></div>
-      <div class="card"><div class="card-hd"><span class="card-tt" id="mTitle">2025 — Mes a mes</span></div><div class="mchart" id="mChart"></div><div style="display:flex;justify-content:space-between;margin-top:5px"><span style="font-size:9px;color:var(--tm)">ENE</span><span style="font-size:9px;color:var(--tm)">DIC</span></div></div>
+      <div class="card"><div class="card-hd"><span class="card-tt" id="mTitle">2025 — Mes a mes</span></div><div class="mchart" id="mChart"></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:8px;color:var(--tm)">ENE</span><span style="font-size:8px;color:var(--tm)">DIC</span></div></div>
     </div>
-    <div class="card" style="margin-bottom:16px"><div class="card-hd"><span class="card-tt">Profit por Año</span></div><div id="yrC" style="display:flex;align-items:flex-end;gap:14px;height:90px;padding-top:8px"></div></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
-      <span style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em">Actividad Reciente</span>
-      <button class="btn" style="font-size:12px;padding:5px 10px" onclick="goPage('airdrops',document.querySelector('[onclick*=airdrops]'))">Ver todos →</button>
+    <div class="card" style="margin-bottom:14px"><div class="card-hd"><span class="card-tt">Profit por Año</span></div><div id="yrC" style="display:flex;align-items:flex-end;gap:12px;height:80px;padding-top:6px"></div></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span style="font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em">Actividad Reciente</span>
+      <button class="btn btn-sm" onclick="goPage('airdrops',document.querySelector('[onclick*=airdrops]'))">Ver todos →</button>
     </div>
     <div class="twrap"><div class="tscroll"><table>
       <thead><tr><th>Proyecto</th><th>Tipo</th><th>Ecosistema</th><th>Invertido</th><th>Potencial</th><th>Profit</th><th>Status</th></tr></thead>
@@ -274,20 +315,37 @@ tbody td{padding:10px 12px;vertical-align:middle}
           <span class="ftab" onclick="filterA('finalizado',this)">Finalizados</span>
           <span class="ftab" onclick="filterA('reclamado',this)">Reclamados</span>
         </div>
-        <button class="btn btn-acc" onclick="openAM(null)"><i class="ti ti-plus"></i>Nuevo Airdrop</button>
+        <button class="btn btn-acc btn-sm" onclick="openAM(null)"><i class="ti ti-plus"></i>Nuevo</button>
       </div>
       <div class="tscroll"><table>
-        <thead><tr><th>Proyecto</th><th>Tipo</th><th>Ecosistema</th><th>Explorador</th><th>Puntos</th><th>Tokens</th><th>Vendido $</th><th>Invertido</th><th>Premarket</th><th>Potencial</th><th>Profit</th><th>Status</th><th></th></tr></thead>
+        <thead><tr><th>Proyecto</th><th>Tipo</th><th>Ecosistema</th><th>Explorador</th><th>Puntos</th><th>Tokens</th><th>Vendido $</th><th>Invertido</th><th>Premarket</th><th>Potencial</th><th>F.Inicio</th><th>F.Fin</th><th>F.Reclamo</th><th>Profit</th><th>Status</th><th></th></tr></thead>
         <tbody id="aTbl"></tbody>
       </table></div>
     </div>
   </div>
 
+  <!-- CALENDARIO -->
+  <div class="page" id="page-calendar">
+    <div class="cal-nav">
+      <button class="btn btn-sm" onclick="calPrev()"><i class="ti ti-chevron-left"></i></button>
+      <span class="cal-title" id="calTitle"></span>
+      <button class="btn btn-sm" onclick="calNext()"><i class="ti ti-chevron-right"></i></button>
+    </div>
+    <div class="cal-legend">
+      <div class="cal-leg-item"><span style="width:10px;height:10px;background:var(--rd);border-radius:2px;display:inline-block"></span>Por finalizar</div>
+      <div class="cal-leg-item"><span style="width:10px;height:10px;background:var(--gr);border-radius:2px;display:inline-block"></span>Por reclamar</div>
+      <div class="cal-leg-item"><span style="width:10px;height:10px;background:var(--pu);border-radius:2px;display:inline-block"></span>Vesting</div>
+    </div>
+    <div class="cal-grid" id="calHead"></div>
+    <div style="height:8px"></div>
+    <div class="cal-grid" id="calBody"></div>
+  </div>
+
   <!-- RECLAMADOS -->
   <div class="page" id="page-claims">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
-      <span style="font-size:12px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em">Historial de Reclamos</span>
-      <button class="btn btn-acc" onclick="openCM(null)"><i class="ti ti-plus"></i>Registrar Reclamo</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <span style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em">Historial de Reclamos</span>
+      <button class="btn btn-acc btn-sm" onclick="openCM(null)"><i class="ti ti-plus"></i>Registrar</button>
     </div>
     <div class="twrap"><div class="tscroll"><table>
       <thead><tr><th>Airdrop</th><th>Fecha</th><th>Tokens Reclamados</th><th>Tokens Vendidos</th><th>Venta $</th><th>Comisión</th><th>Neto</th><th></th></tr></thead>
@@ -295,73 +353,41 @@ tbody td{padding:10px 12px;vertical-align:middle}
     </table></div></div>
   </div>
 
-  <!-- STATS -->
-  <div class="page" id="page-stats">
-    <div class="sgrid" style="margin-bottom:16px">
-      <div class="scard"><div class="slbl">Mejor Airdrop</div><div class="sval up" id="st-b" style="font-size:14px">—</div><div class="ssub up" id="st-bv"></div></div>
-      <div class="scard"><div class="slbl">Tasa de Éxito</div><div class="sval up" id="st-r">0%</div><div class="ssub" id="st-rs"></div></div>
-      <div class="scard"><div class="slbl">Airdrops Activos</div><div class="sval yw" id="st-a">0</div><div class="ssub">en progreso</div></div>
-      <div class="scard"><div class="slbl">Total Comisiones</div><div class="sval dn" id="st-f">$0</div><div class="ssub">pagadas</div></div>
-      <div class="scard"><div class="slbl">Potencial Pendiente</div><div class="sval yw" id="st-p">$0</div><div class="ssub">no reclamados</div></div>
+  <!-- VESTING -->
+  <div class="page" id="page-vesting">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <span style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em">Vesting Schedule</span>
+      <button class="btn btn-acc btn-sm" onclick="openVestModal(null)"><i class="ti ti-plus"></i>Agregar Airdrop</button>
     </div>
-    <div class="r2">
-      <div class="card"><div class="card-hd"><span class="card-tt">Por Tipo de Airdrop</span></div><div id="tpC"></div></div>
-      <div class="card"><div class="card-hd"><span class="card-tt">Inversión vs Retorno</span></div><div id="ivC"></div></div>
+    <div id="vestList"></div>
+  </div>
+
+  <!-- PROXIMOS AIRDROPS -->
+  <div class="page" id="page-next">
+    <div class="twrap">
+      <div class="tctrl">
+        <span style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em">Próximos Airdrops</span>
+        <button class="btn btn-acc btn-sm" onclick="openNextModal(null)"><i class="ti ti-plus"></i>Agregar</button>
+      </div>
+      <div class="tscroll"><table>
+        <thead><tr><th>Proyecto</th><th>Tipo</th><th>Ecosistema</th><th>Explorador</th><th>Puntos</th><th>Invertido</th><th>Potencial</th><th>F.Inicio</th><th>F.Fin</th><th>Estado</th><th></th></tr></thead>
+        <tbody id="nTbl"></tbody>
+      </table></div>
     </div>
   </div>
 
-  <!-- SETUP -->
-  <div class="page" id="page-setup">
-    <div class="setup-card">
-      <h3><i class="ti ti-cloud"></i>Configurar Supabase (Sincronización Cloud)</h3>
-      <p>Supabase es una base de datos gratuita. Con esto puedes acceder a tus datos desde cualquier dispositivo: PC, celular, tablet. Solo configúralo una vez.</p>
-      <p><strong style="color:var(--acc)">Paso 1:</strong> Ve a <a href="https://supabase.com" target="_blank">supabase.com</a> → crea cuenta gratis → crea proyecto.</p>
-      <p style="margin-top:7px"><strong style="color:var(--acc)">Paso 2:</strong> En SQL Editor ejecuta:</p>
-      <div class="codeblock">create table airdrops (
-  id text primary key,
-  name text not null,
-  type text, ecosystem text, explorer text,
-  status text default 'activo',
-  points numeric default 0,
-  tokens numeric default 0,
-  premarket numeric default 0,
-  sold_tokens numeric default 0,
-  sold_usd numeric default 0,
-  invested numeric default 0,
-  potential numeric default 0,
-  profit numeric default 0,
-  date_start text, date_end text, notes text,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
-);
-create table claims (
-  id text primary key,
-  airdrop_id text, airdrop_name text, date text,
-  tokens_claimed numeric default 0,
-  tokens_sold numeric default 0,
-  usd_sold numeric default 0,
-  fee numeric default 0,
-  net numeric default 0,
-  notes text,
-  created_at timestamptz default now()
-);
-alter table airdrops enable row level security;
-alter table claims enable row level security;
-create policy "allow all" on airdrops for all using (true) with check (true);
-create policy "allow all" on claims for all using (true) with check (true);</div>
-      <p><strong style="color:var(--acc)">Paso 3:</strong> Settings → API → copia URL y anon key:</p>
-      <div class="irow"><input id="cfgU" placeholder="https://xxxx.supabase.co" type="text"></div>
-      <div class="irow"><input id="cfgK" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." type="text"></div>
-      <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
-        <button class="btn btn-acc" onclick="saveSBCfg()"><i class="ti ti-device-floppy"></i>Guardar y Conectar</button>
-        <button class="btn" onclick="testSB()"><i class="ti ti-plug"></i>Probar conexión</button>
-        <button class="btn" onclick="clearSBCfg()" style="color:var(--rd)"><i class="ti ti-unlink"></i>Desconectar</button>
-      </div>
+  <!-- STATS -->
+  <div class="page" id="page-stats">
+    <div class="sgrid" style="margin-bottom:14px">
+      <div class="scard"><div class="slbl">Mejor Airdrop</div><div class="sval up" id="st-b" style="font-size:13px">—</div><div class="ssub up" id="st-bv"></div></div>
+      <div class="scard"><div class="slbl">Tasa de Éxito</div><div class="sval up" id="st-r">0%</div><div class="ssub" id="st-rs"></div></div>
+      <div class="scard"><div class="slbl">Activos</div><div class="sval yw" id="st-a">0</div><div class="ssub">en progreso</div></div>
+      <div class="scard"><div class="slbl">Comisiones</div><div class="sval dn" id="st-f">$0</div><div class="ssub">pagadas</div></div>
+      <div class="scard"><div class="slbl">Potencial Pendiente</div><div class="sval yw" id="st-p">$0</div><div class="ssub">no reclamados</div></div>
     </div>
-    <div class="setup-card neutral">
-      <h3><i class="ti ti-database-import"></i>Migrar datos locales → Supabase</h3>
-      <p>Si ya tenías datos guardados localmente y quieres subirlos a la nube:</p>
-      <button class="btn btn-acc" onclick="migrateLocal()"><i class="ti ti-cloud-upload"></i>Migrar datos locales a Supabase</button>
+    <div class="r2">
+      <div class="card"><div class="card-hd"><span class="card-tt">Por Tipo</span></div><div id="tpC"></div></div>
+      <div class="card"><div class="card-hd"><span class="card-tt">Inversión vs Retorno</span></div><div id="ivC"></div></div>
     </div>
   </div>
 </div>
@@ -372,8 +398,8 @@ create policy "allow all" on claims for all using (true) with check (true);</div
   <div class="modal">
     <div class="mhd"><div class="mtt"><i class="ti ti-rocket"></i><span id="modAT">Nuevo Airdrop</span></div><button class="mx" onclick="closeModal('modA')"><i class="ti ti-x"></i></button></div>
     <div class="fg">
-      <div class="fsec ff"><i class="ti ti-info-circle"></i>Información básica</div>
-      <div class="fgrp ff"><label class="flbl">Nombre del Proyecto *</label><input class="finp" id="fa-n" placeholder="Ej: Hyperliquid"></div>
+      <div class="fsec ff"><i class="ti ti-info-circle"></i>Información Básica</div>
+      <div class="fgrp ff"><label class="flbl">Nombre *</label><input class="finp" id="fa-n" placeholder="Ej: Hyperliquid"></div>
       <div class="fgrp"><label class="flbl">Tipo</label>
         <select class="fsel" id="fa-t"><option value="">Seleccionar</option><option>DeFi</option><option>Testnet</option><option>NFT</option><option>Gaming</option><option>Social</option><option>L2</option><option>Interoperabilidad</option><option>DEX</option><option>Otro</option></select></div>
       <div class="fgrp"><label class="flbl">Ecosistema</label>
@@ -385,6 +411,7 @@ create policy "allow all" on claims for all using (true) with check (true);</div
       <div class="fgrp"><label class="flbl">Puntos</label><input class="finp" id="fa-pts" type="number" placeholder="0"></div>
       <div class="fgrp"><label class="flbl">Fecha Inicio</label><input class="finp" id="fa-ds" type="date"></div>
       <div class="fgrp"><label class="flbl">Fecha Fin</label><input class="finp" id="fa-de" type="date"></div>
+      <div class="fgrp"><label class="flbl">Fecha de Reclamo</label><input class="finp" id="fa-dr" type="date"></div>
       <div class="fdiv"></div>
       <div class="fsec ff"><i class="ti ti-coin"></i>Financiero</div>
       <div class="fgrp"><label class="flbl">Tokens Recibidos</label><input class="finp" id="fa-tok" type="number" placeholder="0" oninput="calcP()"></div>
@@ -395,7 +422,7 @@ create policy "allow all" on claims for all using (true) with check (true);</div
       <div class="fgrp"><label class="flbl">Profit Calculado</label><div class="autocalc" id="fa-pd" style="color:var(--gr)">$0.00</div></div>
       <div class="fdiv"></div>
       <div class="fsec ff"><i class="ti ti-crystal-ball"></i>Potencial</div>
-      <div class="fgrp ff"><label class="flbl">Proyección de Ganancia Estimada $</label><input class="finp" id="fa-pot" type="number" placeholder="0.00"><span class="fhint">¿Cuánto estimas recibir de este airdrop?</span></div>
+      <div class="fgrp ff"><label class="flbl">Proyección Estimada $</label><input class="finp" id="fa-pot" type="number" placeholder="0.00"><span class="fhint">¿Cuánto estimas recibir?</span></div>
       <div class="fgrp ff"><label class="flbl">Notas</label><textarea class="ftxt" id="fa-no" placeholder="Observaciones..."></textarea></div>
       <div class="factions"><button class="btn" onclick="closeModal('modA')">Cancelar</button><button class="btn btn-acc" onclick="saveA()"><i class="ti ti-device-floppy"></i>Guardar</button></div>
     </div>
@@ -404,14 +431,14 @@ create policy "allow all" on claims for all using (true) with check (true);</div
 
 <!-- MODAL RECLAMO -->
 <div class="overlay" id="modC">
-  <div class="modal" style="max-width:470px">
+  <div class="modal" style="max-width:460px">
     <div class="mhd"><div class="mtt"><i class="ti ti-coins"></i>Registrar Reclamo</div><button class="mx" onclick="closeModal('modC')"><i class="ti ti-x"></i></button></div>
     <div class="fg">
       <div class="fgrp ff"><label class="flbl">Airdrop *</label><select class="fsel" id="fc-a"><option value="">Seleccionar...</option></select></div>
       <div class="fgrp"><label class="flbl">Fecha *</label><input class="finp" id="fc-d" type="date"></div>
       <div class="fgrp"><label class="flbl">Tokens Reclamados</label><input class="finp" id="fc-tc" type="number" placeholder="0" oninput="calcN()"></div>
       <div class="fgrp"><label class="flbl">Tokens Vendidos</label><input class="finp" id="fc-ts" type="number" placeholder="0" oninput="calcN()"></div>
-      <div class="fgrp"><label class="flbl">Total Venta USD $</label><input class="finp" id="fc-u" type="number" placeholder="0.00" oninput="calcN()"></div>
+      <div class="fgrp"><label class="flbl">Total Venta $</label><input class="finp" id="fc-u" type="number" placeholder="0.00" oninput="calcN()"></div>
       <div class="fgrp"><label class="flbl">Comisión $</label><input class="finp" id="fc-f" type="number" placeholder="0.00" step="0.01" oninput="calcN()"></div>
       <div class="fgrp ff"><label class="flbl">Neto Recibido</label><div class="autocalc" id="fc-net" style="color:var(--gr)">$0.00</div></div>
       <div class="fgrp ff"><label class="flbl">Notas</label><textarea class="ftxt" id="fc-no" placeholder="Detalles..."></textarea></div>
@@ -422,76 +449,143 @@ create policy "allow all" on claims for all using (true) with check (true);</div
 
 <!-- MODAL DETALLE -->
 <div class="overlay" id="modD">
-  <div class="modal" style="max-width:490px">
+  <div class="modal" style="max-width:480px">
     <div class="mhd"><div class="mtt"><i class="ti ti-info-circle"></i><span id="dT">—</span></div><button class="mx" onclick="closeModal('modD')"><i class="ti ti-x"></i></button></div>
     <div id="dC"></div>
   </div>
 </div>
 
+<!-- MODAL VESTING -->
+<div class="overlay" id="modVest">
+  <div class="modal">
+    <div class="mhd"><div class="mtt"><i class="ti ti-clock-dollar"></i>Configurar Vesting</div><button class="mx" onclick="closeModal('modVest')"><i class="ti ti-x"></i></button></div>
+    <div class="fg">
+      <div class="fgrp ff"><label class="flbl">Airdrop (Finalizado/Reclamado) *</label><select class="fsel" id="fv-a"><option value="">Seleccionar...</option></select></div>
+      <div id="vestDates" class="ff" style="display:flex;flex-direction:column;gap:6px;margin-top:4px"></div>
+      <div class="ff" style="margin-top:8px"><button class="btn btn-sm" onclick="addVestDate()"><i class="ti ti-plus"></i>Agregar fecha de reclamo</button></div>
+      <div class="factions"><button class="btn" onclick="closeModal('modVest')">Cancelar</button><button class="btn btn-acc" onclick="saveVest()"><i class="ti ti-device-floppy"></i>Guardar</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROXIMO AIRDROP -->
+<div class="overlay" id="modNext">
+  <div class="modal">
+    <div class="mhd"><div class="mtt"><i class="ti ti-rocket"></i><span id="modNT">Próximo Airdrop</span></div><button class="mx" onclick="closeModal('modNext')"><i class="ti ti-x"></i></button></div>
+    <div class="fg">
+      <div class="fsec ff"><i class="ti ti-info-circle"></i>Información</div>
+      <div class="fgrp ff"><label class="flbl">Nombre *</label><input class="finp" id="fn-n" placeholder="Nombre del airdrop"></div>
+      <div class="fgrp"><label class="flbl">Tipo</label>
+        <select class="fsel" id="fn-t"><option value="">Seleccionar</option><option>DeFi</option><option>Testnet</option><option>NFT</option><option>Gaming</option><option>Social</option><option>L2</option><option>Interoperabilidad</option><option>DEX</option><option>Otro</option></select></div>
+      <div class="fgrp"><label class="flbl">Ecosistema</label>
+        <select class="fsel" id="fn-e"><option value="">Seleccionar</option><option>Ethereum</option><option>Solana</option><option>Arbitrum</option><option>Cosmos</option><option>BSC</option><option>Polygon</option><option>Matic</option><option>Base</option><option>Sui</option><option>Aptos</option><option>Venom</option><option>Otro</option></select></div>
+      <div class="fgrp"><label class="flbl">Explorador</label>
+        <select class="fsel" id="fn-x"><option value="">Seleccionar</option><option>Brave</option><option>Chrome</option><option>Edge</option><option>Firefox</option></select></div>
+      <div class="fgrp"><label class="flbl">Puntos</label><input class="finp" id="fn-pts" type="number" placeholder="0"></div>
+      <div class="fgrp"><label class="flbl">Invertido $</label><input class="finp" id="fn-iv" type="number" placeholder="0.00"></div>
+      <div class="fgrp"><label class="flbl">Fecha Inicio</label><input class="finp" id="fn-ds" type="date"></div>
+      <div class="fgrp"><label class="flbl">Fecha Fin Est.</label><input class="finp" id="fn-de" type="date"></div>
+      <div class="fgrp ff"><label class="flbl">Potencial Estimado $</label><input class="finp" id="fn-pot" type="number" placeholder="0.00"></div>
+      <div class="fgrp ff"><label class="flbl">Notas</label><textarea class="ftxt" id="fn-no" placeholder="Detalles..."></textarea></div>
+      <div class="factions"><button class="btn" onclick="closeModal('modNext')">Cancelar</button><button class="btn btn-acc" onclick="saveNext()"><i class="ti ti-device-floppy"></i>Guardar</button></div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── SUPABASE ──────────────────────────────────────────────
-// Credenciales preconfiguradas — no necesitas configurar nada
-const SB_URL = 'https://cdjokhaelmmizdomdmnk.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkam9raGFlbG1taXpkb21kbW5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjU5OTEsImV4cCI6MjA5NjMwMTk5MX0.WxR6BT6WzTUFGte6Xqb_5ztjYUJxQ7n23v0fkD6XsZE';
-const SBU='ah_sburl', SBK='ah_sbkey';
+const SB_URL='https://cdjokhaelmmizdomdmnk.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkam9raGFlbG1taXpkb21kbW5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjU5OTEsImV4cCI6MjA5NjMwMTk5MX0.WxR6BT6WzTUFGte6Xqb_5ztjYUJxQ7n23v0fkD6XsZE';
 let sb=null;
-function initSB(){
-  try{
-    sb=supabase.createClient(SB_URL, SB_KEY);
-    setSS('ok','Supabase ✓');
-    // Also fill setup page fields for reference
-    const cu=document.getElementById('cfgU'), ck=document.getElementById('cfgK');
-    if(cu) cu.value=SB_URL;
-    if(ck) ck.value='(preconfigurado)';
-  }catch(e){ sb=null; setSS('err','Error'); }
-}
-function setSS(s,l){ const d=document.getElementById('sdot'); d.className='sync-dot '+(s==='ok'?'sd-ok':s==='syncing'?'sd-sync':'sd-err'); document.getElementById('slbl').textContent=l; }
-function saveSBCfg(){
-  const u=document.getElementById('cfgU').value.trim(), k=document.getElementById('cfgK').value.trim();
-  if(!u||!k){ toast('Ingresa URL y Key','err'); return; }
-  localStorage.setItem(SBU,u); localStorage.setItem(SBK,k); initSB(); toast('Configuración guardada','info');
-  setTimeout(testSB,600);
-}
-async function testSB(){
-  if(!sb){ toast('Primero configura Supabase','err'); return; }
-  setSS('syncing','Probando...');
-  try{ const {error}=await sb.from('airdrops').select('id').limit(1); if(error) throw error; setSS('ok','Supabase ✓'); toast('Conexión exitosa ✓'); }
-  catch(e){ setSS('err','Error'); toast('Error: '+e.message,'err'); }
-}
-function clearSBCfg(){ localStorage.removeItem(SBU); localStorage.removeItem(SBK); sb=null; setSS('err','Local'); toast('Desconectado — modo local','info'); }
+function initSB(){try{sb=supabase.createClient(SB_URL,SB_KEY);setSS('ok','Supabase ✓');}catch(e){sb=null;setSS('err','Local');}}
+function setSS(s,l){const d=document.getElementById('sdot');d.className='sync-dot '+(s==='ok'?'sd-ok':s==='syncing'?'sd-sync':'sd-err');document.getElementById('slbl').textContent=l;}
 
 // ── DATA ──────────────────────────────────────────────────
-const LSA='ah_airdrops', LSC='ah_claims';
-let airdrops=[], claims=[], eAid=null, eCid=null, filt='all', srchQ='';
+const LSA='ah_airdrops',LSC='ah_claims',LSV='ah_vesting',LSN='ah_next';
+let airdrops=[],claims=[],vestings=[],nexts=[];
+let eAid=null,eCid=null,eVid=null,eNid=null,filt='all',srchQ='';
+let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 
-function loadLocal(){ try{airdrops=JSON.parse(localStorage.getItem(LSA)||'[]')}catch(e){airdrops=[]} try{claims=JSON.parse(localStorage.getItem(LSC)||'[]')}catch(e){claims=[]} }
-function saveLocal(){ localStorage.setItem(LSA,JSON.stringify(airdrops)); localStorage.setItem(LSC,JSON.stringify(claims)); }
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function loadLocal(){
+  try{airdrops=JSON.parse(localStorage.getItem(LSA)||'[]')}catch(e){airdrops=[];}
+  try{claims=JSON.parse(localStorage.getItem(LSC)||'[]')}catch(e){claims=[];}
+  try{vestings=JSON.parse(localStorage.getItem(LSV)||'[]')}catch(e){vestings=[];}
+  try{nexts=JSON.parse(localStorage.getItem(LSN)||'[]')}catch(e){nexts=[];}
+}
+function saveLocal(){
+  localStorage.setItem(LSA,JSON.stringify(airdrops));
+  localStorage.setItem(LSC,JSON.stringify(claims));
+  localStorage.setItem(LSV,JSON.stringify(vestings));
+  localStorage.setItem(LSN,JSON.stringify(nexts));
+}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
 
-function a2db(a){ return {id:a.id,name:a.name,type:a.type||null,ecosystem:a.ecosystem||null,explorer:a.explorer||null,status:a.status,points:a.points||0,tokens:a.tokens||0,premarket:a.premarket||0,sold_tokens:a.soldTokens||0,sold_usd:a.soldUsd||0,invested:a.invested||0,potential:a.potential||0,profit:a.profit||0,date_start:a.dateStart||null,date_end:a.dateEnd||null,notes:a.notes||null,updated_at:new Date().toISOString()}; }
-function db2a(r){ return {id:r.id,name:r.name,type:r.type,ecosystem:r.ecosystem,explorer:r.explorer,status:r.status,points:r.points||0,tokens:r.tokens||0,premarket:r.premarket||0,soldTokens:r.sold_tokens||0,soldUsd:r.sold_usd||0,invested:r.invested||0,potential:r.potential||0,profit:r.profit||0,dateStart:r.date_start,dateEnd:r.date_end,notes:r.notes,createdAt:r.created_at,updatedAt:r.updated_at}; }
-function c2db(c){ return {id:c.id,airdrop_id:c.airdropId,airdrop_name:c.airdropName,date:c.date,tokens_claimed:c.tokensClaimed||0,tokens_sold:c.tokensSold||0,usd_sold:c.usdSold||0,fee:c.fee||0,net:c.net||0,notes:c.notes||null}; }
-function db2c(r){ return {id:r.id,airdropId:r.airdrop_id,airdropName:r.airdrop_name,date:r.date,tokensClaimed:r.tokens_claimed||0,tokensSold:r.tokens_sold||0,usdSold:r.usd_sold||0,fee:r.fee||0,net:r.net||0,notes:r.notes,createdAt:r.created_at}; }
+function a2db(a){return {id:a.id,name:a.name,type:a.type||null,ecosystem:a.ecosystem||null,explorer:a.explorer||null,status:a.status,points:a.points||0,tokens:a.tokens||0,premarket:a.premarket||0,sold_tokens:a.soldTokens||0,sold_usd:a.soldUsd||0,invested:a.invested||0,potential:a.potential||0,profit:a.profit||0,date_start:a.dateStart||null,date_end:a.dateEnd||null,date_claim:a.dateClaim||null,notes:a.notes||null,updated_at:new Date().toISOString()};}
+function db2a(r){return {id:r.id,name:r.name,type:r.type,ecosystem:r.ecosystem,explorer:r.explorer,status:r.status,points:r.points||0,tokens:r.tokens||0,premarket:r.premarket||0,soldTokens:r.sold_tokens||0,soldUsd:r.sold_usd||0,invested:r.invested||0,potential:r.potential||0,profit:r.profit||0,dateStart:r.date_start,dateEnd:r.date_end,dateClaim:r.date_claim,notes:r.notes,createdAt:r.created_at,updatedAt:r.updated_at};}
+function c2db(c){return {id:c.id,airdrop_id:c.airdropId,airdrop_name:c.airdropName,date:c.date,tokens_claimed:c.tokensClaimed||0,tokens_sold:c.tokensSold||0,usd_sold:c.usdSold||0,fee:c.fee||0,net:c.net||0,notes:c.notes||null};}
+function db2c(r){return {id:r.id,airdropId:r.airdrop_id,airdropName:r.airdrop_name,date:r.date,tokensClaimed:r.tokens_claimed||0,tokensSold:r.tokens_sold||0,usdSold:r.usd_sold||0,fee:r.fee||0,net:r.net||0,notes:r.notes,createdAt:r.created_at};}
 
 async function loadAll(){
-  if(sb){ setSS('syncing','Cargando...');
-    try{ const [ra,rc]=await Promise.all([sb.from('airdrops').select('*').order('created_at',{ascending:false}),sb.from('claims').select('*').order('created_at',{ascending:false})]);
+  if(sb){
+    setSS('syncing','Cargando...');
+    try{
+      const [ra,rc]=await Promise.all([
+        sb.from('airdrops').select('*').order('created_at',{ascending:false}),
+        sb.from('claims').select('*').order('created_at',{ascending:false})
+      ]);
       if(ra.error||rc.error) throw ra.error||rc.error;
-      airdrops=(ra.data||[]).map(db2a); claims=(rc.data||[]).map(db2c); saveLocal(); setSS('ok','Supabase');
-    }catch(e){ setSS('err','Sync error'); toast('Error: '+e.message,'err'); loadLocal(); }
+      airdrops=(ra.data||[]).map(db2a);
+      claims=(rc.data||[]).map(db2c);
+      loadLocal(); // load vesting & nexts from local
+      vestings=JSON.parse(localStorage.getItem(LSV)||'[]');
+      nexts=JSON.parse(localStorage.getItem(LSN)||'[]');
+      localStorage.setItem(LSA,JSON.stringify(airdrops));
+      localStorage.setItem(LSC,JSON.stringify(claims));
+      setSS('ok','Supabase ✓');
+    }catch(e){setSS('err','Sync err');toast('Error: '+e.message,'err');loadLocal();}
   } else loadLocal();
 }
-async function upsA(a){ if(sb){ setSS('syncing','Guardando...'); try{ const {error}=await sb.from('airdrops').upsert(a2db(a)); if(error) throw error; setSS('ok','Supabase'); }catch(e){ setSS('err','Error'); toast('Sync error: '+e.message,'err'); } } saveLocal(); }
-async function upsC(c){ if(sb){ setSS('syncing','Guardando...'); try{ const {error}=await sb.from('claims').upsert(c2db(c)); if(error) throw error; setSS('ok','Supabase'); }catch(e){ setSS('err','Error'); toast('Sync error: '+e.message,'err'); } } saveLocal(); }
-async function delA(id){ if(sb){ await sb.from('airdrops').delete().eq('id',id); await sb.from('claims').delete().eq('airdrop_id',id); } saveLocal(); }
-async function delC(id){ if(sb){ await sb.from('claims').delete().eq('id',id); } saveLocal(); }
-async function migrateLocal(){
-  if(!sb){ toast('Primero conecta Supabase','err'); return; }
-  const la=JSON.parse(localStorage.getItem(LSA)||'[]'), lc=JSON.parse(localStorage.getItem(LSC)||'[]');
-  if(!la.length&&!lc.length){ toast('No hay datos locales','info'); return; }
-  setSS('syncing','Migrando...');
-  try{ if(la.length) await sb.from('airdrops').upsert(la.map(a2db)); if(lc.length) await sb.from('claims').upsert(lc.map(c2db)); setSS('ok','Supabase'); toast('Migración exitosa: '+la.length+' airdrops, '+lc.length+' reclamos'); }
-  catch(e){ setSS('err','Error'); toast('Error: '+e.message,'err'); }
+async function upsA(a){if(sb){setSS('syncing','...');try{const {error}=await sb.from('airdrops').upsert(a2db(a));if(error)throw error;setSS('ok','Supabase ✓');}catch(e){setSS('err','Err');toast('Sync err','err');}}saveLocal();}
+async function upsC(c){if(sb){setSS('syncing','...');try{const {error}=await sb.from('claims').upsert(c2db(c));if(error)throw error;setSS('ok','Supabase ✓');}catch(e){setSS('err','Err');}}saveLocal();}
+async function delA(id){if(sb){await sb.from('airdrops').delete().eq('id',id);await sb.from('claims').delete().eq('airdrop_id',id);}saveLocal();}
+async function delC(id){if(sb){await sb.from('claims').delete().eq('id',id);}saveLocal();}
+
+// ── POPULATE YEAR FILTER ──────────────────────────────────
+function populateYearFilter(){
+  const sel=document.getElementById('db-year');
+  const cur=sel.value;
+  const years=new Set();
+  const thisYear=new Date().getFullYear();
+  for(let y=2023;y<=thisYear+1;y++) years.add(y);
+  claims.forEach(c=>{if(c.date)years.add(parseInt(c.date.slice(0,4)));} );
+  airdrops.forEach(a=>{
+    [a.dateStart,a.dateEnd,a.dateClaim].forEach(d=>{if(d)years.add(parseInt(d.slice(0,4)));} );
+  });
+  sel.innerHTML='<option value="">Todos los años</option>';
+  [...years].sort((a,b)=>b-a).forEach(y=>{
+    sel.innerHTML+=`<option value="${y}" ${cur==y?'selected':''}>${y}</option>`;
+  });
+}
+function clearDBFilter(){document.getElementById('db-year').value='';document.getElementById('db-month').value='';renderDB();}
+function getFilteredData(){
+  const yr=document.getElementById('db-year').value;
+  const mo=document.getElementById('db-month').value;
+  if(!yr&&!mo) return {fa:airdrops,fc:claims};
+  const fc=claims.filter(c=>{
+    if(!c.date) return false;
+    if(yr&&!c.date.startsWith(yr)) return false;
+    if(mo&&c.date.slice(5,7)!==mo) return false;
+    return true;
+  });
+  const ids=new Set(fc.map(c=>c.airdropId));
+  const fa=airdrops.filter(a=>{
+    const d=a.dateClaim||a.dateEnd||a.dateStart||'';
+    if(yr&&mo) return d.startsWith(yr+'-'+mo)||ids.has(a.id);
+    if(yr) return d.startsWith(yr)||ids.has(a.id);
+    if(mo) return d.slice(5,7)===mo||ids.has(a.id);
+    return true;
+  });
+  return {fa,fc};
 }
 
 // ── NAV ───────────────────────────────────────────────────
@@ -500,28 +594,30 @@ function goPage(id,el){
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
-  const titles={dashboard:'Dashboard',airdrops:'Mis Airdrops',claims:'Historial de Reclamos',stats:'Estadísticas',setup:'Configurar Supabase'};
+  const titles={dashboard:'Dashboard',airdrops:'Mis Airdrops',claims:'Historial de Reclamos',stats:'Estadísticas',calendar:'Calendario',vesting:'Vesting',next:'Próximos Airdrops'};
   document.getElementById('topTitle').textContent=titles[id]||'';
   if(id==='dashboard') renderDB();
   if(id==='airdrops') renderA();
   if(id==='claims') renderC();
   if(id==='stats') renderSt();
+  if(id==='calendar') renderCal();
+  if(id==='vesting') renderVest();
+  if(id==='next') renderNext();
   closeSide();
 }
-function toggleSide(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sov').style.display='block'; }
-function closeSide(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('sov').style.display='none'; }
+function toggleSide(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sov').style.display='block';}
+function closeSide(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sov').style.display='none';}
 
 // ── MODALS ────────────────────────────────────────────────
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); }));
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
 
 function openAM(a){
   eAid=a?a.id:null;
   document.getElementById('modAT').textContent=a?'Editar Airdrop':'Nuevo Airdrop';
-  const flds=['fa-n','fa-t','fa-e','fa-x','fa-s','fa-pts','fa-ds','fa-de','fa-tok','fa-pm','fa-st','fa-su','fa-iv','fa-pot','fa-no'];
-  flds.forEach(f=>{ const el=document.getElementById(f); if(el) el.value=''; });
+  ['fa-n','fa-t','fa-e','fa-x','fa-s','fa-pts','fa-ds','fa-de','fa-dr','fa-tok','fa-pm','fa-st','fa-su','fa-iv','fa-pot','fa-no'].forEach(f=>{const el=document.getElementById(f);if(el)el.value='';} );
   document.getElementById('fa-s').value='activo';
-  const pd=document.getElementById('fa-pd'); pd.textContent='$0.00'; pd.style.color='var(--gr)';
+  const pd=document.getElementById('fa-pd');pd.textContent='$0.00';pd.style.color='var(--gr)';
   if(a){
     document.getElementById('fa-n').value=a.name||'';
     document.getElementById('fa-t').value=a.type||'';
@@ -531,6 +627,7 @@ function openAM(a){
     document.getElementById('fa-pts').value=a.points||'';
     document.getElementById('fa-ds').value=a.dateStart||'';
     document.getElementById('fa-de').value=a.dateEnd||'';
+    document.getElementById('fa-dr').value=a.dateClaim||'';
     document.getElementById('fa-tok').value=a.tokens||'';
     document.getElementById('fa-pm').value=a.premarket||'';
     document.getElementById('fa-st').value=a.soldTokens||'';
@@ -546,170 +643,380 @@ function openCM(c){
   eCid=c?c.id:null;
   const sel=document.getElementById('fc-a');
   sel.innerHTML='<option value="">Seleccionar airdrop...</option>';
-  airdrops.forEach(a=>{ sel.innerHTML+=`<option value="${a.id}">${a.name}</option>`; });
-  ['fc-a','fc-d','fc-tc','fc-ts','fc-u','fc-f','fc-no'].forEach(f=>{ const el=document.getElementById(f); if(el) el.value=''; });
+  airdrops.forEach(a=>{sel.innerHTML+=`<option value="${a.id}">${a.name}</option>`;} );
+  ['fc-a','fc-d','fc-tc','fc-ts','fc-u','fc-f','fc-no'].forEach(f=>{const el=document.getElementById(f);if(el)el.value='';} );
   document.getElementById('fc-d').value=new Date().toISOString().slice(0,10);
-  const ne=document.getElementById('fc-net'); ne.textContent='$0.00'; ne.style.color='var(--gr)';
-  if(c){ document.getElementById('fc-a').value=c.airdropId||''; document.getElementById('fc-d').value=c.date||''; document.getElementById('fc-tc').value=c.tokensClaimed||''; document.getElementById('fc-ts').value=c.tokensSold||''; document.getElementById('fc-u').value=c.usdSold||''; document.getElementById('fc-f').value=c.fee||''; document.getElementById('fc-no').value=c.notes||''; calcN(); }
+  const ne=document.getElementById('fc-net');ne.textContent='$0.00';ne.style.color='var(--gr)';
+  if(c){document.getElementById('fc-a').value=c.airdropId||'';document.getElementById('fc-d').value=c.date||'';document.getElementById('fc-tc').value=c.tokensClaimed||'';document.getElementById('fc-ts').value=c.tokensSold||'';document.getElementById('fc-u').value=c.usdSold||'';document.getElementById('fc-f').value=c.fee||'';document.getElementById('fc-no').value=c.notes||'';calcN();}
   document.getElementById('modC').classList.add('open');
+}
+function openVestModal(v){
+  eVid=v?v.id:null;
+  const sel=document.getElementById('fv-a');
+  sel.innerHTML='<option value="">Seleccionar airdrop...</option>';
+  airdrops.filter(a=>a.status==='finalizado'||a.status==='reclamado').forEach(a=>{
+    sel.innerHTML+=`<option value="${a.id}" ${v&&v.airdropId===a.id?'selected':''}>${a.name}</option>`;
+  });
+  const vc=document.getElementById('vestDates');
+  vc.innerHTML='';
+  vestDateCount=0;
+  if(v&&v.dates){v.dates.forEach(d=>addVestDate(d));} else {addVestDate();}
+  document.getElementById('modVest').classList.add('open');
+}
+let vestDateCount=0;
+function addVestDate(d){
+  vestDateCount++;
+  const n=vestDateCount;
+  const div=document.createElement('div');
+  div.id='vd-'+n;
+  div.style.cssText='display:grid;grid-template-columns:auto 1fr 1fr auto;gap:6px;align-items:center;background:var(--bg-base);padding:8px;border-radius:6px;border:1px solid var(--border)';
+  div.innerHTML=`<span style="font-size:10px;color:var(--tm);font-weight:700;white-space:nowrap">Fecha ${n}</span><input class="finp" id="vd-date-${n}" type="date" value="${d?d.date:''}"><input class="finp" id="vd-tok-${n}" type="number" placeholder="Tokens" value="${d?d.tokens:''}"><button class="ibtn del" onclick="document.getElementById('vd-${n}').remove()"><i class="ti ti-x"></i></button>`;
+  document.getElementById('vestDates').appendChild(div);
+}
+function saveVest(){
+  const aid=document.getElementById('fv-a').value;
+  if(!aid){toast('Selecciona un airdrop','err');return;}
+  const dates=[];
+  document.querySelectorAll('[id^="vd-date-"]').forEach(inp=>{
+    const n=inp.id.split('-').pop();
+    const tok=parseFloat(document.getElementById('vd-tok-'+n)?.value)||0;
+    if(inp.value) dates.push({date:inp.value,tokens:tok,claimed:false});
+  });
+  const v={id:eVid||uid(),airdropId:aid,airdropName:airdrops.find(a=>a.id===aid)?.name||'',dates,createdAt:new Date().toISOString()};
+  if(eVid){const i=vestings.findIndex(x=>x.id===eVid);if(i>-1)vestings[i]=v;}
+  else vestings.unshift(v);
+  saveLocal();closeModal('modVest');toast('Vesting guardado ✓');renderVest();
+}
+function openNextModal(n){
+  eNid=n?n.id:null;
+  document.getElementById('modNT').textContent=n?'Editar Próximo':'Próximo Airdrop';
+  ['fn-n','fn-t','fn-e','fn-x','fn-pts','fn-iv','fn-ds','fn-de','fn-pot','fn-no'].forEach(f=>{const el=document.getElementById(f);if(el)el.value='';} );
+  if(n){
+    document.getElementById('fn-n').value=n.name||'';
+    document.getElementById('fn-t').value=n.type||'';
+    document.getElementById('fn-e').value=n.ecosystem||'';
+    document.getElementById('fn-x').value=n.explorer||'';
+    document.getElementById('fn-pts').value=n.points||'';
+    document.getElementById('fn-iv').value=n.invested||'';
+    document.getElementById('fn-ds').value=n.dateStart||'';
+    document.getElementById('fn-de').value=n.dateEnd||'';
+    document.getElementById('fn-pot').value=n.potential||'';
+    document.getElementById('fn-no').value=n.notes||'';
+  }
+  document.getElementById('modNext').classList.add('open');
 }
 
 // ── CALCS ─────────────────────────────────────────────────
-function calcP(){ const s=parseFloat(document.getElementById('fa-su').value)||0, i=parseFloat(document.getElementById('fa-iv').value)||0, p=s-i, el=document.getElementById('fa-pd'); el.textContent=(p>=0?'+':'')+'$'+Math.abs(p).toFixed(2); el.style.color=p>=0?'var(--gr)':'var(--rd)'; }
-function calcN(){ const u=parseFloat(document.getElementById('fc-u').value)||0, f=parseFloat(document.getElementById('fc-f').value)||0, n=u-f, el=document.getElementById('fc-net'); el.textContent=(n>=0?'+':'')+'$'+Math.abs(n).toFixed(2); el.style.color=n>=0?'var(--gr)':'var(--rd)'; }
+function calcP(){const s=parseFloat(document.getElementById('fa-su').value)||0,i=parseFloat(document.getElementById('fa-iv').value)||0,p=s-i,el=document.getElementById('fa-pd');el.textContent=(p>=0?'+':'')+'$'+Math.abs(p).toFixed(2);el.style.color=p>=0?'var(--gr)':'var(--rd)';}
+function calcN(){const u=parseFloat(document.getElementById('fc-u').value)||0,f=parseFloat(document.getElementById('fc-f').value)||0,n=u-f,el=document.getElementById('fc-net');el.textContent=(n>=0?'+':'')+'$'+Math.abs(n).toFixed(2);el.style.color=n>=0?'var(--gr)':'var(--rd)';}
 
 // ── SAVE AIRDROP ──────────────────────────────────────────
 async function saveA(){
   const name=document.getElementById('fa-n').value.trim();
-  if(!name){ toast('El nombre es obligatorio','err'); return; }
-  const su=parseFloat(document.getElementById('fa-su').value)||0, iv=parseFloat(document.getElementById('fa-iv').value)||0;
-  const a={id:eAid||uid(),name,type:document.getElementById('fa-t').value||null,ecosystem:document.getElementById('fa-e').value||null,explorer:document.getElementById('fa-x').value||null,status:document.getElementById('fa-s').value,points:parseFloat(document.getElementById('fa-pts').value)||0,tokens:parseFloat(document.getElementById('fa-tok').value)||0,premarket:parseFloat(document.getElementById('fa-pm').value)||0,soldTokens:parseFloat(document.getElementById('fa-st').value)||0,soldUsd:su,invested:iv,potential:parseFloat(document.getElementById('fa-pot').value)||0,profit:su-iv,dateStart:document.getElementById('fa-ds').value||null,dateEnd:document.getElementById('fa-de').value||null,notes:document.getElementById('fa-no').value||null,updatedAt:new Date().toISOString()};
-  if(eAid){ const i=airdrops.findIndex(x=>x.id===eAid); if(i>-1){ a.createdAt=airdrops[i].createdAt; airdrops[i]=a; } }
-  else { a.createdAt=new Date().toISOString(); airdrops.unshift(a); }
-  await upsA(a); closeModal('modA'); toast(eAid?'Airdrop actualizado ✓':'Airdrop guardado ✓'); renderAll();
+  if(!name){toast('El nombre es obligatorio','err');return;}
+  const su=parseFloat(document.getElementById('fa-su').value)||0,iv=parseFloat(document.getElementById('fa-iv').value)||0;
+  const a={id:eAid||uid(),name,type:document.getElementById('fa-t').value||null,ecosystem:document.getElementById('fa-e').value||null,explorer:document.getElementById('fa-x').value||null,status:document.getElementById('fa-s').value,points:parseFloat(document.getElementById('fa-pts').value)||0,tokens:parseFloat(document.getElementById('fa-tok').value)||0,premarket:parseFloat(document.getElementById('fa-pm').value)||0,soldTokens:parseFloat(document.getElementById('fa-st').value)||0,soldUsd:su,invested:iv,potential:parseFloat(document.getElementById('fa-pot').value)||0,profit:su-iv,dateStart:document.getElementById('fa-ds').value||null,dateEnd:document.getElementById('fa-de').value||null,dateClaim:document.getElementById('fa-dr').value||null,notes:document.getElementById('fa-no').value||null,updatedAt:new Date().toISOString()};
+  if(eAid){const i=airdrops.findIndex(x=>x.id===eAid);if(i>-1){a.createdAt=airdrops[i].createdAt;airdrops[i]=a;}}
+  else{a.createdAt=new Date().toISOString();airdrops.unshift(a);}
+  await upsA(a);closeModal('modA');toast(eAid?'Actualizado ✓':'Guardado ✓');renderAll();
 }
 
 // ── SAVE CLAIM ────────────────────────────────────────────
 async function saveC(){
-  const aid=document.getElementById('fc-a').value, date=document.getElementById('fc-d').value;
-  if(!aid||!date){ toast('Selecciona airdrop y fecha','err'); return; }
-  const u=parseFloat(document.getElementById('fc-u').value)||0, f=parseFloat(document.getElementById('fc-f').value)||0;
+  const aid=document.getElementById('fc-a').value,date=document.getElementById('fc-d').value;
+  if(!aid||!date){toast('Selecciona airdrop y fecha','err');return;}
+  const u=parseFloat(document.getElementById('fc-u').value)||0,f=parseFloat(document.getElementById('fc-f').value)||0;
   const c={id:eCid||uid(),airdropId:aid,airdropName:airdrops.find(a=>a.id===aid)?.name||'',date,tokensClaimed:parseFloat(document.getElementById('fc-tc').value)||0,tokensSold:parseFloat(document.getElementById('fc-ts').value)||0,usdSold:u,fee:f,net:u-f,notes:document.getElementById('fc-no').value||null,createdAt:new Date().toISOString()};
-  if(eCid){ const i=claims.findIndex(x=>x.id===eCid); if(i>-1) claims[i]=c; } else claims.unshift(c);
-  syncA(aid); await upsC(c); await upsA(airdrops.find(a=>a.id===aid)); closeModal('modC'); toast('Reclamo guardado y sincronizado ✓'); renderAll();
+  if(eCid){const i=claims.findIndex(x=>x.id===eCid);if(i>-1)claims[i]=c;} else claims.unshift(c);
+  syncA(aid);
+  // Mark vesting dates
+  vestings.forEach(v=>{if(v.airdropId===aid){v.dates.forEach(d=>{if(d.date===date&&!d.claimed){d.claimed=true;d.claimedAt=new Date().toISOString();}});}} );
+  await upsC(c);await upsA(airdrops.find(a=>a.id===aid));saveLocal();
+  closeModal('modC');toast('Reclamo guardado y sincronizado ✓');renderAll();
 }
 function syncA(aid){
   const rel=claims.filter(c=>c.airdropId===aid);
-  const tu=rel.reduce((s,c)=>s+c.usdSold,0), tt=rel.reduce((s,c)=>s+c.tokensSold,0), tc=rel.reduce((s,c)=>s+c.tokensClaimed,0);
+  const tu=rel.reduce((s,c)=>s+c.usdSold,0),tt=rel.reduce((s,c)=>s+c.tokensSold,0),tc=rel.reduce((s,c)=>s+c.tokensClaimed,0);
   const i=airdrops.findIndex(a=>a.id===aid);
-  if(i>-1){ airdrops[i].soldUsd=tu; airdrops[i].soldTokens=tt; if(tc>0) airdrops[i].tokens=Math.max(airdrops[i].tokens||0,tc); airdrops[i].profit=tu-(airdrops[i].invested||0); if(tu>0&&airdrops[i].status!=='reclamado') airdrops[i].status='reclamado'; }
+  if(i>-1){airdrops[i].soldUsd=tu;airdrops[i].soldTokens=tt;if(tc>0)airdrops[i].tokens=Math.max(airdrops[i].tokens||0,tc);airdrops[i].profit=tu-(airdrops[i].invested||0);if(tu>0&&airdrops[i].status!=='reclamado')airdrops[i].status='reclamado';}
 }
 
+// ── SAVE NEXT ─────────────────────────────────────────────
+function saveNext(){
+  const name=document.getElementById('fn-n').value.trim();
+  if(!name){toast('El nombre es obligatorio','err');return;}
+  const n={id:eNid||uid(),name,type:document.getElementById('fn-t').value||null,ecosystem:document.getElementById('fn-e').value||null,explorer:document.getElementById('fn-x').value||null,points:parseFloat(document.getElementById('fn-pts').value)||0,invested:parseFloat(document.getElementById('fn-iv').value)||0,potential:parseFloat(document.getElementById('fn-pot').value)||0,dateStart:document.getElementById('fn-ds').value||null,dateEnd:document.getElementById('fn-de').value||null,notes:document.getElementById('fn-no').value||null,status:'pendiente',createdAt:new Date().toISOString()};
+  if(eNid){const i=nexts.findIndex(x=>x.id===eNid);if(i>-1)nexts[i]=n;} else nexts.unshift(n);
+  saveLocal();closeModal('modNext');toast('Próximo airdrop guardado ✓');renderNext();
+}
+async function promoteNext(id){
+  const n=nexts.find(x=>x.id===id);if(!n)return;
+  const a={id:uid(),name:n.name,type:n.type,ecosystem:n.ecosystem,explorer:n.explorer,status:'activo',points:n.points||0,tokens:0,premarket:0,soldTokens:0,soldUsd:0,invested:n.invested||0,potential:n.potential||0,profit:-(n.invested||0),dateStart:new Date().toISOString().slice(0,10),dateEnd:null,dateClaim:null,notes:n.notes,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  nexts=nexts.filter(x=>x.id!==id);
+  airdrops.unshift(a);
+  await upsA(a);saveLocal();
+  toast(`${n.name} movido a Mis Airdrops ✓`);renderNext();renderDB();
+  document.getElementById('navCnt').textContent=airdrops.length;
+}
+function deleteNext(id){if(!confirm('¿Eliminar?'))return;nexts=nexts.filter(x=>x.id!==id);saveLocal();renderNext();toast('Eliminado');}
+
 // ── DELETE ────────────────────────────────────────────────
-async function deleteA(id){ if(!confirm('¿Eliminar airdrop y sus reclamos?')) return; airdrops=airdrops.filter(a=>a.id!==id); claims=claims.filter(c=>c.airdropId!==id); await delA(id); toast('Airdrop eliminado'); renderAll(); }
-async function deleteC(id){ if(!confirm('¿Eliminar este reclamo?')) return; const c=claims.find(x=>x.id===id); claims=claims.filter(x=>x.id!==id); if(c){ syncA(c.airdropId); await upsA(airdrops.find(a=>a.id===c.airdropId)); } await delC(id); toast('Reclamo eliminado'); renderAll(); }
+async function deleteA(id){if(!confirm('¿Eliminar airdrop y sus reclamos?'))return;airdrops=airdrops.filter(a=>a.id!==id);claims=claims.filter(c=>c.airdropId!==id);await delA(id);toast('Eliminado');renderAll();}
+async function deleteC(id){if(!confirm('¿Eliminar reclamo?'))return;const c=claims.find(x=>x.id===id);claims=claims.filter(x=>x.id!==id);if(c){syncA(c.airdropId);await upsA(airdrops.find(a=>a.id===c.airdropId));}await delC(id);toast('Eliminado');renderAll();}
+function deleteVest(id){if(!confirm('¿Eliminar vesting?'))return;vestings=vestings.filter(x=>x.id!==id);saveLocal();renderVest();}
 
 // ── DASHBOARD ─────────────────────────────────────────────
 function renderDB(){
-  const inv=airdrops.reduce((s,a)=>s+(a.invested||0),0);
-  const sold=airdrops.reduce((s,a)=>s+(a.soldUsd||0),0);
+  populateYearFilter();
+  const {fa,fc}=getFilteredData();
+  const inv=fa.reduce((s,a)=>s+(a.invested||0),0);
+  const sold=fa.reduce((s,a)=>s+(a.soldUsd||0),0);
   const pft=sold-inv;
   const pot=airdrops.filter(a=>(a.potential||0)>0).reduce((s,a)=>s+(a.potential||0),0);
   const potCnt=airdrops.filter(a=>(a.potential||0)>0).length;
-  const done=airdrops.filter(a=>a.status==='reclamado'||a.status==='finalizado');
+  const done=fa.filter(a=>a.status==='reclamado'||a.status==='finalizado');
   const roiA=done.filter(a=>(a.invested||0)>0).map(a=>(a.soldUsd||0)/(a.invested||1));
   const avgR=roiA.length?roiA.reduce((s,v)=>s+v,0)/roiA.length:0;
   document.getElementById('s-pft').textContent=(pft>=0?'+':'')+fu(pft);
   document.getElementById('s-pft').className='sval '+(pft>=0?'up':'dn');
   document.getElementById('s-pft-s').textContent=done.length+' finalizados';
   document.getElementById('s-inv').textContent=fu(inv);
-  document.getElementById('s-inv-s').textContent=airdrops.length+' airdrops';
+  document.getElementById('s-inv-s').textContent=airdrops.length+' totales';
   document.getElementById('s-rcv').textContent=fu(sold);
   document.getElementById('s-pot').textContent=fu(pot);
   document.getElementById('s-pot-s').textContent=potCnt+' con proyección';
   document.getElementById('s-roi').textContent=avgR.toFixed(1)+'×';
-  const sorted=[...airdrops].sort((a,b)=>(b.profit||0)-(a.profit||0));
-  const gainer=sorted[0], loser=sorted[sorted.length-1];
+  const sorted=[...fa].sort((a,b)=>(b.profit||0)-(a.profit||0));
+  const gainer=sorted[0],loser=sorted[sorted.length-1];
   document.getElementById('gl-n').textContent=gainer?.name||'—';
   document.getElementById('gl-v').textContent=gainer?(gainer.profit>=0?'+':'')+fu(gainer.profit||0):'—';
   document.getElementById('ll-n').textContent=loser?.name||'—';
   document.getElementById('ll-v').textContent=loser?fu(loser.profit||0):'—';
-  // Top10
-  document.getElementById('top10').innerHTML=sorted.slice(0,10).map((a,i)=>`<div class="t10item"><span class="t10rank">${i+1}</span><span class="t10name">${a.name}</span><span class="t10eco">${a.ecosystem||''}</span><span class="t10val ${(a.profit||0)>=0?'up':'dn'}">${(a.profit||0)>=0?'+':''}${fu(a.profit||0)}</span></div>`).join('')||'<div class="empty"><i class="ti ti-trophy"></i><p>Sin datos</p></div>';
+  // Top10 - 3 rows: name, ecosystem, amount
+  document.getElementById('top10').innerHTML=sorted.slice(0,10).map((a,i)=>`<div class="t10item"><span class="t10rank">${i+1}</span><div class="t10body"><div class="t10name">${a.name}</div><div class="t10eco">${a.ecosystem||'—'}</div></div><span class="t10val ${(a.profit||0)>=0?'up':'dn'}">${(a.profit||0)>=0?'+':''}${fu(a.profit||0)}</span></div>`).join('')||'<div class="empty"><i class="ti ti-trophy"></i><p>Sin datos</p></div>';
   // Status
   const sts={activo:0,pendiente:0,finalizado:0,reclamado:0};
-  airdrops.forEach(a=>{ if(sts[a.status]!==undefined) sts[a.status]++; });
-  document.getElementById('bySt').innerHTML=`<div class="srow"><span style="color:var(--gr)">● Activos</span><span class="up" style="font-family:var(--mono)">${sts.activo}</span></div><div class="srow"><span style="color:var(--yw)">● Pendientes</span><span class="yw" style="font-family:var(--mono)">${sts.pendiente}</span></div><div class="srow"><span style="color:var(--pu)">● Reclamados</span><span class="up" style="font-family:var(--mono)">${sts.reclamado}</span></div><div class="srow"><span style="color:var(--tm)">● Finalizados</span><span style="font-family:var(--mono)">${sts.finalizado}</span></div>`;
-  // ByType
+  airdrops.forEach(a=>{if(sts[a.status]!==undefined)sts[a.status]++;});
+  document.getElementById('bySt').innerHTML=`<div class="srow"><span class="bl">● Activos</span><span class="bl" style="font-family:var(--mono)">${sts.activo}</span></div><div class="srow"><span class="yw">● Pendientes</span><span class="yw" style="font-family:var(--mono)">${sts.pendiente}</span></div><div class="srow"><span class="dn">● Finalizados</span><span class="dn" style="font-family:var(--mono)">${sts.finalizado}</span></div><div class="srow"><span class="up">● Reclamados</span><span class="up" style="font-family:var(--mono)">${sts.reclamado}</span></div>`;
+  // By Type count
   const tm={};
-  airdrops.forEach(a=>{ if(a.type){ tm[a.type]=(tm[a.type]||0)+1; }});
+  airdrops.forEach(a=>{if(a.type){tm[a.type]=(tm[a.type]||0)+1;}});
   const tcs=['var(--acc)','var(--bl)','var(--pu)','var(--gr)','var(--yw)'];
-  document.getElementById('byTp').innerHTML=Object.entries(tm).sort((a,b)=>b[1]-a[1]).map(([t,n],i)=>`<div class="srow"><span style="color:${tcs[i%tcs.length]}">● ${t}</span><span style="font-family:var(--mono)">${n}</span></div>`).join('')||'<div style="color:var(--tm);font-size:12px;padding:6px 0">Sin tipos</div>';
-  // Eco
+  document.getElementById('byTp').innerHTML=Object.entries(tm).sort((a,b)=>b[1]-a[1]).map(([t,n],i)=>`<div class="srow"><span style="color:${tcs[i%tcs.length]}">● ${t}</span><span style="font-family:var(--mono)">${n}</span></div>`).join('')||'<div style="color:var(--tm);font-size:11px;padding:6px 0">Sin tipos</div>';
+  // Profit by type
+  const ptm={};
+  fa.forEach(a=>{if(a.type){ptm[a.type]=(ptm[a.type]||0)+(a.profit||0);}});
+  const ptArr=Object.entries(ptm).sort((a,b)=>b[1]-a[1]);
+  const mxpt=Math.max(...ptArr.map(e=>Math.abs(e[1])),1);
+  document.getElementById('profitByType').innerHTML=ptArr.length?ptArr.map(([t,v],i)=>`<div class="brow"><span class="blbl">${t}</span><div class="btrack"><div class="bfill" style="width:${Math.abs(v)/mxpt*100}%;background:${tcs[i%tcs.length]}"></div></div><span class="bval ${v>=0?'up':'dn'}">${v>=0?'+':''}${fu(v)}</span></div>`).join(''):'<div style="color:var(--tm);font-size:11px">Sin datos</div>';
+  // Eco chart
   const em={};
-  airdrops.forEach(a=>{ if(a.ecosystem){ em[a.ecosystem]=(em[a.ecosystem]||0)+(a.profit||0); }});
+  fa.forEach(a=>{if(a.ecosystem){em[a.ecosystem]=(em[a.ecosystem]||0)+(a.profit||0);}});
   const ea=Object.entries(em).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  const mx=Math.max(...ea.map(e=>Math.abs(e[1])),1);
+  const mxe=Math.max(...ea.map(e=>Math.abs(e[1])),1);
   const ec=['var(--acc)','var(--pu)','var(--bl)','var(--gr)','var(--yw)','#6b4f35'];
-  document.getElementById('ecoC').innerHTML=ea.length?ea.map(([e,v],i)=>`<div class="brow"><span class="blbl">${e}</span><div class="btrack"><div class="bfill" style="width:${Math.abs(v)/mx*100}%;background:${ec[i%ec.length]}"></div></div><span class="bval ${v>=0?'up':'dn'}">${v>=0?'+':''}${fu(v)}</span></div>`).join(''):'<div style="color:var(--tm);font-size:12px;padding:6px 0">Sin datos</div>';
-  // Month
+  document.getElementById('ecoC').innerHTML=ea.length?ea.map(([e,v],i)=>`<div class="brow"><span class="blbl">${e}</span><div class="btrack"><div class="bfill" style="width:${Math.abs(v)/mxe*100}%;background:${ec[i%ec.length]}"></div></div><span class="bval ${v>=0?'up':'dn'}">${v>=0?'+':''}${fu(v)}</span></div>`).join(''):'<div style="color:var(--tm);font-size:11px;padding:6px 0">Sin datos</div>';
+  // Month chart
   const yr=new Date().getFullYear();
   document.getElementById('mTitle').textContent=yr+' — Mes a mes';
   const mo=Array(12).fill(0);
-  claims.forEach(c=>{ if(c.date&&c.date.startsWith(yr)){ const m=parseInt(c.date.slice(5,7))-1; if(m>=0&&m<12) mo[m]+=c.net||0; }});
+  fc.forEach(c=>{if(c.date&&c.date.startsWith(yr)){const m=parseInt(c.date.slice(5,7))-1;if(m>=0&&m<12)mo[m]+=c.net||0;}});
   const mxm=Math.max(...mo.map(Math.abs),1);
   const ml=['E','F','M','A','M','J','J','A','S','O','N','D'];
-  document.getElementById('mChart').innerHTML=mo.map((v,i)=>`<div class="mcol"><div class="mbar" style="height:${Math.abs(v)/mxm*70}px;background:${v>=0?'var(--acc)':'var(--rd)'}"></div><span class="mlbl">${ml[i]}</span></div>`).join('');
-  // Year
+  document.getElementById('mChart').innerHTML=mo.map((v,i)=>`<div class="mcol"><div class="mbar" style="height:${Math.abs(v)/mxm*65}px;background:${v>=0?'var(--acc)':'var(--rd)'}" title="${ml[i]+': '+(v>=0?'+':'')+fu(v)}"></div><span class="mlbl">${ml[i]}</span></div>`).join('');
+  // Year chart
   const ym={};
-  claims.forEach(c=>{ if(c.date){ const y=c.date.slice(0,4); ym[y]=(ym[y]||0)+(c.net||0); }});
-  if(!Object.keys(ym).length){ airdrops.filter(a=>a.profit).forEach(a=>{ const d=a.dateEnd||a.updatedAt||a.createdAt||''; const y=d.slice(0,4); if(y) ym[y]=(ym[y]||0)+(a.profit||0); }); }
+  fc.forEach(c=>{if(c.date){const y=c.date.slice(0,4);ym[y]=(ym[y]||0)+(c.net||0);}});
   const ya=Object.entries(ym).sort((a,b)=>a[0].localeCompare(b[0]));
   const mxy=Math.max(...ya.map(e=>Math.abs(e[1])),1);
-  document.getElementById('yrC').innerHTML=ya.length?ya.map(([y,v])=>`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:44px"><span style="font-size:10px;font-family:var(--mono);color:${v>=0?'var(--gr)':'var(--rd)'}">${v>=0?'+':''}${fu(v)}</span><div style="width:100%;border-radius:3px 3px 0 0;min-height:3px;height:${Math.abs(v)/mxy*70}px;background:${v>=0?'var(--acc)':'var(--rd)'}"></div><span style="font-size:11px;color:var(--tm);font-family:var(--mono)">${y}</span></div>`).join(''):'<div style="color:var(--tm);font-size:12px;align-self:center">Sin datos por año</div>';
+  document.getElementById('yrC').innerHTML=ya.length?ya.map(([y,v])=>`<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:40px"><span style="font-size:9px;font-family:var(--mono);color:${v>=0?'var(--gr)':'var(--rd)'}">${v>=0?'+':''}${fu(v)}</span><div style="width:100%;border-radius:3px 3px 0 0;min-height:3px;height:${Math.abs(v)/mxy*65}px;background:${v>=0?'var(--acc)':'var(--rd)'}"></div><span style="font-size:10px;color:var(--tm);font-family:var(--mono)">${y}</span></div>`).join(''):'<div style="color:var(--tm);font-size:11px;align-self:center">Sin datos</div>';
   // Recent
   document.getElementById('recTbl').innerHTML=airdrops.slice(0,6).map(a=>`<tr onclick="openDet('${a.id}')"><td class="tdn">${a.name}</td><td>${a.type?`<span class="badge bt">${a.type}</span>`:'-'}</td><td>${etag(a.ecosystem)}</td><td class="tdm">${fu(a.invested||0)}</td><td class="tdm ${(a.potential||0)>0?'yw':''}">${(a.potential||0)>0?fu(a.potential):'—'}</td><td class="tdm ${(a.profit||0)>=0?'up':'dn'}">${(a.profit||0)>=0?'+':''}${fu(a.profit||0)}</td><td>${sbadge(a.status)}</td></tr>`).join('')||'<tr><td colspan="7"><div class="empty"><i class="ti ti-rocket"></i><p>Agrega tu primer airdrop</p></div></td></tr>';
   document.getElementById('navCnt').textContent=airdrops.length;
 }
+
+// ── RENDER AIRDROPS ───────────────────────────────────────
 function renderA(){
   document.getElementById('navCnt').textContent=airdrops.length;
   let data=[...airdrops];
   if(filt!=='all') data=data.filter(a=>a.status===filt);
   if(srchQ) data=data.filter(a=>(a.name||'').toLowerCase().includes(srchQ.toLowerCase()));
-  document.getElementById('aTbl').innerHTML=data.length?data.map(a=>`<tr onclick="openDet('${a.id}')"><td class="tdn">${a.name}</td><td>${a.type?`<span class="badge bt">${a.type}</span>`:'-'}</td><td>${etag(a.ecosystem)}</td><td class="tdd">${a.explorer||'—'}</td><td class="tdm">${a.points?fn(a.points):'—'}</td><td class="tdm">${a.tokens?fn(a.tokens):'—'}</td><td class="tdm ${(a.soldUsd||0)>0?'up':''}">${a.soldUsd?fu(a.soldUsd):'—'}</td><td class="tdm">${a.invested?fu(a.invested):'—'}</td><td class="tdm">${a.premarket?'$'+a.premarket:'—'}</td><td class="tdm ${(a.potential||0)>0?'yw':''}">${(a.potential||0)>0?fu(a.potential):'—'}</td><td class="tdm ${(a.profit||0)>=0?'up':'dn'}">${(a.profit||0)>=0?'+':''}${fu(a.profit||0)}</td><td>${sbadge(a.status)}</td><td onclick="event.stopPropagation()"><div class="acell"><button class="ibtn" onclick="openDet('${a.id}')" title="Ver"><i class="ti ti-eye"></i></button><button class="ibtn" onclick="openAM(airdrops.find(x=>x.id==='${a.id}'))" title="Editar"><i class="ti ti-edit"></i></button><button class="ibtn del" onclick="deleteA('${a.id}')" title="Eliminar"><i class="ti ti-trash"></i></button></div></td></tr>`).join(''):`<tr><td colspan="13"><div class="empty"><i class="ti ti-list"></i><p>No hay airdrops${filt!=='all'?' con este filtro':''}</p></div></td></tr>`;
+  document.getElementById('aTbl').innerHTML=data.length?data.map(a=>`<tr onclick="openDet('${a.id}')"><td class="tdn">${a.name}</td><td>${a.type?`<span class="badge bt">${a.type}</span>`:'-'}</td><td>${etag(a.ecosystem)}</td><td class="tdd">${a.explorer||'—'}</td><td class="tdm">${a.points?fn(a.points):'—'}</td><td class="tdm">${a.tokens?fn(a.tokens):'—'}</td><td class="tdm ${(a.soldUsd||0)>0?'up':''}">${a.soldUsd?fu(a.soldUsd):'—'}</td><td class="tdm">${a.invested?fu(a.invested):'—'}</td><td class="tdm">${a.premarket?'$'+a.premarket:'—'}</td><td class="tdm ${(a.potential||0)>0?'yw':''}">${(a.potential||0)>0?fu(a.potential):'—'}</td><td class="tdd">${fd(a.dateStart)}</td><td class="tdd">${fd(a.dateEnd)}</td><td class="tdd">${fd(a.dateClaim)}</td><td class="tdm ${(a.profit||0)>=0?'up':'dn'}">${(a.profit||0)>=0?'+':''}${fu(a.profit||0)}</td><td>${sbadge(a.status)}</td><td onclick="event.stopPropagation()"><div class="acell"><button class="ibtn" onclick="openDet('${a.id}')" title="Ver"><i class="ti ti-eye"></i></button><button class="ibtn" onclick="openAM(airdrops.find(x=>x.id==='${a.id}'))" title="Editar"><i class="ti ti-edit"></i></button><button class="ibtn del" onclick="deleteA('${a.id}')" title="Eliminar"><i class="ti ti-trash"></i></button></div></td></tr>`).join(''):`<tr><td colspan="16"><div class="empty"><i class="ti ti-list"></i><p>No hay airdrops</p></div></td></tr>`;
 }
+
+// ── RENDER CLAIMS ─────────────────────────────────────────
 function renderC(){
   document.getElementById('cTbl').innerHTML=claims.length?claims.map(c=>`<tr><td class="tdn">${c.airdropName}</td><td class="tdm">${fd(c.date)}</td><td class="tdm">${c.tokensClaimed?fn(c.tokensClaimed):'—'}</td><td class="tdm">${c.tokensSold?fn(c.tokensSold):'—'}</td><td class="tdm up">${c.usdSold?fu(c.usdSold):'—'}</td><td class="tdm dn">${c.fee?fu(c.fee):'—'}</td><td class="tdm ${(c.net||0)>=0?'up':'dn'}">${(c.net||0)>=0?'+':''}${fu(c.net||0)}</td><td><div class="acell"><button class="ibtn" onclick="openCM(claims.find(x=>x.id==='${c.id}'))" title="Editar"><i class="ti ti-edit"></i></button><button class="ibtn del" onclick="deleteC('${c.id}')" title="Eliminar"><i class="ti ti-trash"></i></button></div></td></tr>`).join(''):`<tr><td colspan="8"><div class="empty"><i class="ti ti-coins"></i><p>No hay reclamos aún</p></div></td></tr>`;
 }
+
+// ── RENDER VESTING ────────────────────────────────────────
+function renderVest(){
+  const el=document.getElementById('vestList');
+  if(!vestings.length){el.innerHTML='<div class="empty"><i class="ti ti-clock-dollar"></i><p>No hay vesting configurado. Agrega un airdrop de vesting.</p></div>';return;}
+  el.innerHTML=vestings.map(v=>{
+    const total=v.dates?v.dates.length:0;
+    const claimed=v.dates?v.dates.filter(d=>d.claimed).length:0;
+    return `<div class="vest-item">
+      <div class="vest-header">
+        <div><div class="vest-name">${v.airdropName}</div><div style="font-size:10px;color:var(--tm);margin-top:2px">${claimed}/${total} fechas reclamadas</div></div>
+        <div class="acell"><button class="ibtn" onclick="openVestModal(vestings.find(x=>x.id==='${v.id}'))"><i class="ti ti-edit"></i></button><button class="ibtn del" onclick="deleteVest('${v.id}')"><i class="ti ti-trash"></i></button></div>
+      </div>
+      <div class="vest-dates">
+        ${(v.dates||[]).map((d,i)=>`<div class="vest-date-row">
+          <span class="vest-date-lbl">Fecha ${i+1}</span>
+          <span class="vest-date-val">${fd(d.date)}</span>
+          <span class="vest-date-tok">${d.tokens?fn(d.tokens)+' tokens':'—'}</span>
+          <span class="vest-date-status">${d.claimed?`<span class="badge b-reclamado"><span class="dot" style="background:var(--gr)"></span>Reclamado</span>`:`<span class="badge b-pendiente">Pendiente</span>`}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── RENDER NEXT ───────────────────────────────────────────
+function renderNext(){
+  document.getElementById('nTbl').innerHTML=nexts.length?nexts.map(n=>`<tr><td class="tdn">${n.name}</td><td>${n.type?`<span class="badge bt">${n.type}</span>`:'-'}</td><td>${etag(n.ecosystem)}</td><td class="tdd">${n.explorer||'—'}</td><td class="tdm">${n.points?fn(n.points):'—'}</td><td class="tdm">${n.invested?fu(n.invested):'—'}</td><td class="tdm ${(n.potential||0)>0?'yw':''}">${(n.potential||0)>0?fu(n.potential):'—'}</td><td class="tdd">${fd(n.dateStart)}</td><td class="tdd">${fd(n.dateEnd)}</td><td><span class="badge b-pendiente">Pendiente</span></td><td onclick="event.stopPropagation()"><div class="acell"><button class="ibtn grn" onclick="promoteNext('${n.id}')" title="Marcar como Realizado → mover a Mis Airdrops"><i class="ti ti-check"></i></button><button class="ibtn" onclick="openNextModal(nexts.find(x=>x.id==='${n.id}'))" title="Editar"><i class="ti ti-edit"></i></button><button class="ibtn del" onclick="deleteNext('${n.id}')" title="Eliminar"><i class="ti ti-trash"></i></button></div></td></tr>`).join(''):`<tr><td colspan="11"><div class="empty"><i class="ti ti-rocket"></i><p>No hay próximos airdrops</p></div></td></tr>`;
+}
+
+// ── CALENDAR ──────────────────────────────────────────────
+function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCal();}
+function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCal();}
+function renderCal(){
+  const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('calTitle').textContent=months[calMonth]+' '+calYear;
+  const days=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  document.getElementById('calHead').innerHTML=days.map(d=>`<div class="cal-head">${d}</div>`).join('');
+  const first=new Date(calYear,calMonth,1);
+  let startDay=first.getDay()-1;if(startDay<0)startDay=6;
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const daysInPrev=new Date(calYear,calMonth,0).getDate();
+  const today=new Date();
+  // Build events map
+  const evMap={};
+  function addEv(dateStr,ev){if(!dateStr)return;const k=dateStr.slice(0,10);if(!evMap[k])evMap[k]=[];evMap[k].push(ev);}
+  airdrops.forEach(a=>{
+    if(a.dateEnd) addEv(a.dateEnd,{type:'end',name:a.name,id:a.id});
+    if(a.dateClaim) addEv(a.dateClaim,{type:'claim',name:a.name,id:a.id});
+  });
+  vestings.forEach(v=>{
+    (v.dates||[]).forEach(d=>{if(!d.claimed)addEv(d.date,{type:'vest',name:v.airdropName+' vest.',id:v.id});});
+  });
+  let html='';
+  const totalCells=42;
+  for(let i=0;i<totalCells;i++){
+    let dayNum,isOther=false,dateStr='';
+    if(i<startDay){dayNum=daysInPrev-startDay+i+1;isOther=true;}
+    else if(i-startDay>=daysInMonth){dayNum=i-startDay-daysInMonth+1;isOther=true;}
+    else{dayNum=i-startDay+1;dateStr=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(dayNum).padStart(2,'0');}
+    const isToday=!isOther&&today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===dayNum;
+    const evs=dateStr&&evMap[dateStr]?evMap[dateStr]:[];
+    html+=`<div class="cal-day${isOther?' other-month':''}${isToday?' today':''}">
+      <div class="cal-day-num">${dayNum}</div>
+      ${evs.map(e=>`<div class="cal-event cal-ev-${e.type==='end'?'end':e.type==='claim'?'claim':'vest'}" title="${e.name}">${e.name}</div>`).join('')}
+    </div>`;
+  }
+  if(totalCells-startDay-daysInMonth>=7){
+    // trim last row if all other month
+    html=html.split('<div class="cal-day other-month">').slice(0,-7).join('<div class="cal-day other-month">');
+  }
+  document.getElementById('calBody').innerHTML=html;
+}
+
+// ── STATS ─────────────────────────────────────────────────
 function renderSt(){
-  const sorted=[...airdrops].sort((a,b)=>(b.profit||0)-(a.profit||0)), best=sorted[0];
+  const sorted=[...airdrops].sort((a,b)=>(b.profit||0)-(a.profit||0)),best=sorted[0];
   document.getElementById('st-b').textContent=best?best.name:'—';
   document.getElementById('st-bv').textContent=best?fu(best.profit||0):'$0';
-  const pos=airdrops.filter(a=>(a.profit||0)>0).length, rate=airdrops.length?Math.round(pos/airdrops.length*100):0;
+  const pos=airdrops.filter(a=>(a.profit||0)>0).length,rate=airdrops.length?Math.round(pos/airdrops.length*100):0;
   document.getElementById('st-r').textContent=rate+'%';
   document.getElementById('st-rs').textContent=pos+' de '+airdrops.length+' positivos';
   document.getElementById('st-a').textContent=airdrops.filter(a=>a.status==='activo').length;
   document.getElementById('st-f').textContent=fu(claims.reduce((s,c)=>s+(c.fee||0),0));
   document.getElementById('st-p').textContent=fu(airdrops.filter(a=>(a.potential||0)>0&&a.status!=='reclamado').reduce((s,a)=>s+(a.potential||0),0));
   const tm={};
-  airdrops.forEach(a=>{ if(a.type){ tm[a.type]=(tm[a.type]||0)+(a.profit||0); }});
-  const ta=Object.entries(tm).sort((a,b)=>b[1]-a[1]), mxt=Math.max(...ta.map(e=>Math.abs(e[1])),1);
-  document.getElementById('tpC').innerHTML=ta.length?ta.map(([t,v])=>`<div class="brow"><span class="blbl" style="width:88px">${t}</span><div class="btrack"><div class="bfill" style="width:${Math.abs(v)/mxt*100}%;background:var(--acc)"></div></div><span class="bval ${v>=0?'up':'dn'}">${v>=0?'+':''}${fu(v)}</span></div>`).join(''):'<div style="color:var(--tm);font-size:12px">Sin datos</div>';
-  const ti=airdrops.reduce((s,a)=>s+(a.invested||0),0), tr=airdrops.reduce((s,a)=>s+(a.soldUsd||0),0), mir=Math.max(ti,tr,1);
-  document.getElementById('ivC').innerHTML=`<div class="brow"><span class="blbl">Invertido</span><div class="btrack"><div class="bfill" style="width:${ti/mir*100}%;background:var(--bl)"></div></div><span class="bval">${fu(ti)}</span></div><div class="brow"><span class="blbl">Retorno</span><div class="btrack"><div class="bfill" style="width:${tr/mir*100}%;background:var(--gr)"></div></div><span class="bval up">${fu(tr)}</span></div><div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)"><div style="font-size:10px;color:var(--tm);margin-bottom:3px;text-transform:uppercase;letter-spacing:.07em">ROI Neto</div><div style="font-size:24px;font-weight:700;font-family:var(--mono);color:${(tr-ti)>=0?'var(--gr)':'var(--rd)'}">${(tr-ti)>=0?'+':''}${fu(tr-ti)}</div></div>`;
+  airdrops.forEach(a=>{if(a.type){tm[a.type]=(tm[a.type]||0)+(a.profit||0);}});
+  const ta=Object.entries(tm).sort((a,b)=>b[1]-a[1]),mxt=Math.max(...ta.map(e=>Math.abs(e[1])),1);
+  document.getElementById('tpC').innerHTML=ta.length?ta.map(([t,v])=>`<div class="brow"><span class="blbl">${t}</span><div class="btrack"><div class="bfill" style="width:${Math.abs(v)/mxt*100}%;background:var(--acc)"></div></div><span class="bval ${v>=0?'up':'dn'}">${v>=0?'+':''}${fu(v)}</span></div>`).join(''):'<div style="color:var(--tm);font-size:11px">Sin datos</div>';
+  const ti=airdrops.reduce((s,a)=>s+(a.invested||0),0),tr=airdrops.reduce((s,a)=>s+(a.soldUsd||0),0),mir=Math.max(ti,tr,1);
+  document.getElementById('ivC').innerHTML=`<div class="brow"><span class="blbl">Invertido</span><div class="btrack"><div class="bfill" style="width:${ti/mir*100}%;background:var(--bl)"></div></div><span class="bval">${fu(ti)}</span></div><div class="brow"><span class="blbl">Retorno</span><div class="btrack"><div class="bfill" style="width:${tr/mir*100}%;background:var(--gr)"></div></div><span class="bval up">${fu(tr)}</span></div><div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><div style="font-size:9px;color:var(--tm);margin-bottom:2px;text-transform:uppercase">ROI Neto</div><div style="font-size:22px;font-weight:700;font-family:var(--mono);color:${(tr-ti)>=0?'var(--gr)':'var(--rd)'}">${(tr-ti)>=0?'+':''}${fu(tr-ti)}</div></div>`;
 }
+
+// ── DETAIL ────────────────────────────────────────────────
 function openDet(id){
-  const a=airdrops.find(x=>x.id===id); if(!a) return;
+  const a=airdrops.find(x=>x.id===id);if(!a)return;
   document.getElementById('dT').textContent=a.name;
   const rel=claims.filter(c=>c.airdropId===id);
-  document.getElementById('dC').innerHTML=`<div class="dgrid"><div class="ditem"><div class="dlbl">Tipo</div><div class="dval" style="font-family:var(--body)">${a.type||'—'}</div></div><div class="ditem"><div class="dlbl">Ecosistema</div><div class="dval" style="font-family:var(--body)">${a.ecosystem||'—'}</div></div><div class="ditem"><div class="dlbl">Explorador</div><div class="dval" style="font-family:var(--body)">${a.explorer||'—'}</div></div><div class="ditem"><div class="dlbl">Estado</div><div class="dval" style="font-family:var(--body)">${a.status}</div></div><div class="ditem"><div class="dlbl">Puntos</div><div class="dval">${a.points?fn(a.points):'—'}</div></div><div class="ditem"><div class="dlbl">Tokens</div><div class="dval">${a.tokens?fn(a.tokens):'—'}</div></div><div class="ditem"><div class="dlbl">Invertido</div><div class="dval">${fu(a.invested||0)}</div></div><div class="ditem"><div class="dlbl">Vendido</div><div class="dval up">${fu(a.soldUsd||0)}</div></div><div class="ditem"><div class="dlbl">Potencial</div><div class="dval yw">${(a.potential||0)>0?fu(a.potential):'—'}</div></div><div class="ditem"><div class="dlbl">Premarket</div><div class="dval">${a.premarket?'$'+a.premarket:'—'}</div></div></div><div style="background:var(--bg-base);border-radius:var(--rs);padding:12px 14px;margin-bottom:11px"><div style="font-size:10px;color:var(--tm);margin-bottom:2px;text-transform:uppercase;letter-spacing:.07em">PROFIT TOTAL</div><div style="font-size:26px;font-weight:700;font-family:var(--mono);color:${(a.profit||0)>=0?'var(--gr)':'var(--rd)'}">${(a.profit||0)>=0?'+':''}${fu(a.profit||0)}</div></div>${rel.length?`<div style="font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px">Reclamos (${rel.length})</div>${rel.map(c=>`<div class="srow"><span style="font-size:11px;color:var(--tm)">${fd(c.date)}</span><span class="${c.net>=0?'up':'dn'}" style="font-family:var(--mono);font-size:12px">${c.net>=0?'+':''}${fu(c.net)}</span></div>`).join('')}`:''}${a.notes?`<div style="margin-top:11px;padding:9px;background:var(--bg-base);border-radius:var(--rs);font-size:13px;color:var(--ts)">${a.notes}</div>`:''}<div style="display:flex;gap:8px;margin-top:13px"><button class="btn" onclick="openAM(airdrops.find(x=>x.id==='${id}')); closeModal('modD')"><i class="ti ti-edit"></i>Editar</button><button class="btn btn-acc" onclick="openCM(null); document.getElementById('fc-a').value='${id}'; closeModal('modD')"><i class="ti ti-coins"></i>Reclamo</button></div>`;
+  document.getElementById('dC').innerHTML=`<div class="dgrid"><div class="ditem"><div class="dlbl">Tipo</div><div class="dval" style="font-family:var(--body)">${a.type||'—'}</div></div><div class="ditem"><div class="dlbl">Ecosistema</div><div class="dval" style="font-family:var(--body)">${a.ecosystem||'—'}</div></div><div class="ditem"><div class="dlbl">Explorador</div><div class="dval" style="font-family:var(--body)">${a.explorer||'—'}</div></div><div class="ditem"><div class="dlbl">Estado</div><div class="dval" style="font-family:var(--body)">${a.status}</div></div><div class="ditem"><div class="dlbl">Puntos</div><div class="dval">${a.points?fn(a.points):'—'}</div></div><div class="ditem"><div class="dlbl">Tokens</div><div class="dval">${a.tokens?fn(a.tokens):'—'}</div></div><div class="ditem"><div class="dlbl">Invertido</div><div class="dval">${fu(a.invested||0)}</div></div><div class="ditem"><div class="dlbl">Vendido</div><div class="dval up">${fu(a.soldUsd||0)}</div></div><div class="ditem"><div class="dlbl">Potencial</div><div class="dval yw">${(a.potential||0)>0?fu(a.potential):'—'}</div></div><div class="ditem"><div class="dlbl">F.Reclamo</div><div class="dval">${fd(a.dateClaim)}</div></div></div><div style="background:var(--bg-base);border-radius:var(--rs);padding:10px 12px;margin-bottom:10px"><div style="font-size:9px;color:var(--tm);margin-bottom:2px;text-transform:uppercase">PROFIT</div><div style="font-size:24px;font-weight:700;font-family:var(--mono);color:${(a.profit||0)>=0?'var(--gr)':'var(--rd)'}">${(a.profit||0)>=0?'+':''}${fu(a.profit||0)}</div></div>${rel.length?`<div style="font-size:9px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Reclamos (${rel.length})</div>${rel.map(c=>`<div class="srow"><span style="font-size:10px;color:var(--tm)">${fd(c.date)}</span><span class="${c.net>=0?'up':'dn'}" style="font-family:var(--mono);font-size:11px">${c.net>=0?'+':''}${fu(c.net)}</span></div>`).join('')}`:''}<div style="display:flex;gap:7px;margin-top:12px"><button class="btn btn-sm" onclick="openAM(airdrops.find(x=>x.id==='${id}')); closeModal('modD')"><i class="ti ti-edit"></i>Editar</button><button class="btn btn-acc btn-sm" onclick="openCM(null); document.getElementById('fc-a').value='${id}'; closeModal('modD')"><i class="ti ti-coins"></i>Reclamo</button></div>`;
   document.getElementById('modD').classList.add('open');
 }
 
 // ── FILTERS ───────────────────────────────────────────────
-function filterA(f,el){ filt=f; document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderA(); }
-function onSearch(v){ srchQ=v; if(document.getElementById('page-airdrops').classList.contains('active')) renderA(); }
+function filterA(f,el){filt=f;document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderA();}
+function onSearch(v){srchQ=v;if(document.getElementById('page-airdrops').classList.contains('active'))renderA();}
 
 // ── HELPERS ───────────────────────────────────────────────
-function fu(v){ return '$'+Number(Math.abs(v)).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2}); }
-function fn(v){ return Number(v).toLocaleString('en-US'); }
-function fd(d){ if(!d) return '—'; try{ return new Date(d+'T12:00:00').toLocaleDateString('es',{day:'2-digit',month:'short',year:'numeric'}); }catch(e){ return d; } }
-function sbadge(s){ const m={activo:'ba',pendiente:'bp',finalizado:'be',reclamado:'bc'}, dots={activo:'dg',pendiente:'dy',reclamado:'dp'}; return `<span class="badge ${m[s]||'be'}">${dots[s]?`<span class="dot ${dots[s]}"></span>`:''} ${s}</span>`; }
-function etag(eco){ if(!eco) return '<span style="color:var(--tm);font-size:12px">—</span>'; const map={Ethereum:'eeth',Solana:'esol',Arbitrum:'earb',Cosmos:'ecos',Matic:'ematic',Polygon:'ematic',BSC:'ebsc',Base:'ebase'}; return `<span class="badge beco ${map[eco]||'eother'}">${eco}</span>`; }
-function toast(msg,type='ok'){ const t=document.getElementById('toast'); document.getElementById('tmsg').textContent=msg; t.className='toast show'; t.querySelector('i').className='ti ti-'+(type==='err'?'alert-triangle':type==='info'?'info-circle':'check'); t.style.borderColor=type==='err'?'var(--rd)':type==='info'?'var(--yw)':'var(--blight)'; setTimeout(()=>t.className='toast',3200); }
-function renderAll(){ renderDB(); const a=document.querySelector('.page.active'); if(a){ if(a.id==='page-airdrops') renderA(); if(a.id==='page-claims') renderC(); if(a.id==='page-stats') renderSt(); } }
+function fu(v){return '$'+Number(Math.abs(v)).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2});}
+function fn(v){return Number(v).toLocaleString('en-US');}
+function fd(d){if(!d)return '—';try{return new Date(d+'T12:00:00').toLocaleDateString('es',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;}}
+function sbadge(s){
+  const cls={activo:'b-activo',pendiente:'b-pendiente',finalizado:'b-finalizado',reclamado:'b-reclamado'};
+  const dots={activo:'var(--bl)',pendiente:'var(--yw)',finalizado:'var(--rd)',reclamado:'var(--gr)'};
+  return `<span class="badge ${cls[s]||'b-pendiente'}"><span class="dot" style="background:${dots[s]||'var(--tm)}"></span>${s}</span>`;
+}
+function etag(eco){
+  if(!eco) return '<span style="color:var(--tm);font-size:11px">—</span>';
+  const map={
+    'Ethereum':'eco-eth','Solana':'eco-sol','Arbitrum':'eco-arb','Base':'eco-base',
+    'BSC':'eco-bsc','Polygon':'eco-matic','Matic':'eco-matic','Cosmos':'eco-cos',
+    'Sui':'eco-sui','Aptos':'eco-apt','Venom':'eco-ven'
+  };
+  return `<span class="badge beco ${map[eco]||'eco-other'}">${eco}</span>`;
+}
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  document.getElementById('tmsg').textContent=msg;
+  t.className='toast show';
+  t.querySelector('i').className='ti ti-'+(type==='err'?'alert-triangle':type==='info'?'info-circle':'check');
+  t.style.borderColor=type==='err'?'var(--rd)':type==='info'?'var(--yw)':'var(--blight)';
+  setTimeout(()=>t.className='toast',3200);
+}
+function renderAll(){
+  renderDB();
+  const p=document.querySelector('.page.active');
+  if(p){
+    if(p.id==='page-airdrops') renderA();
+    if(p.id==='page-claims') renderC();
+    if(p.id==='page-stats') renderSt();
+    if(p.id==='page-vesting') renderVest();
+    if(p.id==='page-next') renderNext();
+    if(p.id==='page-calendar') renderCal();
+  }
+}
 
-// ── SEED DATA ─────────────────────────────────────────────
-// Datos de ejemplo — serán reemplazados por tus datos reales del Google Sheet
-// Para cargar tus datos: agrégalos desde la UI o conéctate a Supabase
-function seedDemo(){
-  // Supabase es la fuente de verdad — sin datos de ejemplo
+// ── SEED REAL DATA ────────────────────────────────────────
+async function seedRealData(){
+  if(airdrops.length>0) return;
+  const now=new Date().toISOString();
+  const data=[
+    {id:uid(),name:'mojo',type:'Testnet',ecosystem:'Matic',explorer:'Brave',status:'reclamado',points:84,tokens:84,premarket:0,soldTokens:84,soldUsd:2.05,invested:0,potential:0,profit:2.05,dateStart:'2024-04-01',dateEnd:'2024-04-25',dateClaim:'2024-04-28',notes:'',createdAt:now,updatedAt:now},
+    {id:uid(),name:'sodex',type:'DeFi',ecosystem:'Base',explorer:'Brave',status:'activo',points:30,tokens:0,premarket:0,soldTokens:0,soldUsd:0,invested:0,potential:0,profit:0,dateStart:'2026-05-08',dateEnd:'2024-07-30',dateClaim:null,notes:'',createdAt:now,updatedAt:now},
+    {id:uid(),name:'onefootball',type:'Social',ecosystem:'Base',explorer:'Brave',status:'finalizado',points:9200,tokens:9200,premarket:0,soldTokens:0,soldUsd:0,invested:0,potential:0,profit:0,dateStart:'2025-01-01',dateEnd:'2025-12-31',dateClaim:null,notes:'',createdAt:now,updatedAt:now},
+  ];
+  const claimData=[
+    {id:uid(),airdropId:data[0].id,airdropName:'mojo',date:'2024-04-28',tokensClaimed:84,tokensSold:84,usdSold:2.05,fee:0,net:2.05,notes:'',createdAt:now},
+  ];
+  airdrops=data;
+  claims=claimData;
+  for(const a of data) await upsA(a);
+  for(const c of claimData) await upsC(c);
+  saveLocal();
 }
 
 // ── INIT ──────────────────────────────────────────────────
 async function init(){
   initSB();
   await loadAll();
+  await seedRealData();
   renderDB();
 }
 init();
