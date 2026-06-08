@@ -637,10 +637,21 @@ async function loadAll() {
 async function upsA(a) {
   if (sb) {
     try {
-      var res = await sb.from('airdrops').upsert(a2db(a));
-      if (res.error) throw res.error;
+      var row = a2db(a);
+      var res = await sb.from('airdrops').upsert(row);
+      if (res.error) {
+        // If url column missing, retry without it
+        if (res.error.message && res.error.message.indexOf('url') !== -1) {
+          delete row.url;
+          res = await sb.from('airdrops').upsert(row);
+        }
+        if (res.error) throw res.error;
+      }
       setSS('ok', 'Supabase ✓');
-    } catch(e) { setSS('err', 'Sync err'); }
+    } catch(e) {
+      console.error('upsA error:', e);
+      setSS('err', 'Sync err: ' + (e.message||''));
+    }
   }
   saveLocal();
 }
@@ -1261,9 +1272,9 @@ function renderDB() {
   var recHtml = '';
   airdrops.slice(0,6).forEach(function(a) {
     recHtml += '<tr onclick="openDet(\'' + a.id + '\')">' +
-      '<td class="tdn" style="display:flex;align-items:center;gap:5px">'+a.name+
-        (a.url ? '<a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop" style="flex-shrink:0"><i class="ti ti-external-link"></i></a>' : '') +
-      '</td>' +
+      '<td class="tdn"><span style="display:inline-flex;align-items:center;gap:5px">'+a.name+
+        (a.url ? ' <a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop"><i class="ti ti-external-link"></i></a>' : '') +
+      '</span></td>' +
       '<td>'+(a.type?'<span class="badge bt">'+a.type+'</span>':'-')+'</td>' +
       '<td>'+etag(a.ecosystem)+'</td>' +
       '<td class="tdm">'+fu(a.invested||0)+'</td>' +
@@ -1286,9 +1297,9 @@ function renderA() {
   var html = '';
   data.forEach(function(a) {
     html += '<tr onclick="openDet(\'' + a.id + '\')">' +
-      '<td class="tdn" style="display:flex;align-items:center;gap:5px">'+a.name+
-        (a.url ? '<a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop" style="flex-shrink:0"><i class="ti ti-external-link"></i></a>' : '') +
-      '</td>' +
+      '<td class="tdn"><span style="display:inline-flex;align-items:center;gap:5px">'+a.name+
+        (a.url ? ' <a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop"><i class="ti ti-external-link"></i></a>' : '') +
+      '</span></td>' +
       '<td>'+(a.type?'<span class="badge bt">'+a.type+'</span>':'-')+'</td>' +
       '<td>'+etag(a.ecosystem)+'</td>' +
       '<td class="tdd">'+(a.explorer||'—')+'</td>' +
@@ -1342,9 +1353,9 @@ function renderC() {
   });
   autoRows.forEach(function(a) {
     html += '<tr>' +
-      '<td class="tdn" style="display:flex;align-items:center;gap:5px">'+a.name+
-        (a.url ? '<a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop" style="flex-shrink:0"><i class="ti ti-external-link"></i></a>' : '') +
-      '</td>' +
+      '<td class="tdn"><span style="display:inline-flex;align-items:center;gap:5px">'+a.name+
+        (a.url ? ' <a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop"><i class="ti ti-external-link"></i></a>' : '') +
+      '</span></td>' +
       '<td class="tdm">'+fd(a.dateClaim)+'</td>' +
       '<td class="tdm">'+(a.tokens?fn(a.tokens):'—')+'</td>' +
       '<td class="tdm">'+(a.soldTokens?fn(a.soldTokens):'—')+'</td>' +
@@ -1611,7 +1622,23 @@ function renderAll() {
 // SEED REAL DATA
 // ═══════════════════════════════════════════════════
 async function seedRealData() {
-  if (airdrops.length > 0) return; // Already loaded from Supabase
+  // Only seed if truly empty (Supabase returned nothing AND localStorage empty)
+  if (airdrops.length > 0) return;
+  // Double-check Supabase directly
+  if (sb) {
+    var check = await sb.from('airdrops').select('id').limit(1);
+    if (check.data && check.data.length > 0) {
+      // Data exists in Supabase but didn't load - reload
+      var ra = await sb.from('airdrops').select('*').order('created_at',{ascending:false});
+      var rc = await sb.from('claims').select('*').order('created_at',{ascending:false});
+      if (ra.data && ra.data.length > 0) {
+        airdrops = ra.data.map(db2a);
+        claims = (rc.data||[]).map(db2c);
+        saveLocal();
+        return;
+      }
+    }
+  }
   var now = new Date().toISOString();
   var data = [
   {id:'ah0001',name:'GRASS S2',type:'DePIN',ecosystem:'Solana',explorer:'Brave',status:'activo',points:22706.25,tokens:0.0,premarket:0.0,soldTokens:0.0,soldUsd:0.0,invested:0.0,potential:0.0,profit:0.0,dateStart:null,dateEnd:null,dateClaim:null,notes:'',createdAt:'2024-01-01T00:00:00.000Z',updatedAt:'2024-01-01T00:00:00.000Z'},
@@ -1808,19 +1835,6 @@ function claimFromDetail(id) {
 async function init() {
   initSB();
   await loadAll();
-  // Clear test data from Supabase if it exists
-  if (sb && airdrops.length > 0) {
-    var hasTestData = airdrops.some(function(a) {
-      return a.name === 'mojo' || a.name === 'sodex' || a.name === 'onefootball';
-    });
-    if (hasTestData) {
-      console.log('Clearing test data...');
-      if (sb) await sb.from('airdrops').delete().neq('id','__never__');
-      if (sb) await sb.from('claims').delete().neq('id','__never__');
-      airdrops = []; claims = [];
-      saveLocal();
-    }
-  }
   await seedRealData();
   renderDB();
 }
