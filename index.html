@@ -166,6 +166,13 @@ tbody td{padding:9px 11px;vertical-align:middle}
 .ibtn:hover{background:var(--bg-hover);border-color:var(--border);color:var(--tp)}
 .ibtn.del:hover{background:var(--rdb);border-color:var(--rd);color:var(--rd)}
 .ibtn.grn:hover{background:var(--grb);border-color:var(--gr);color:var(--gr)}
+.ibtn.lnk:hover{background:var(--blb);border-color:var(--bl);color:var(--bl)}
+.srow-click{cursor:pointer;transition:background .15s;border-radius:4px;padding:5px 4px;margin:0 -4px}
+.srow-click:hover{background:var(--bg-hover)}
+.mbar-wrap{position:relative;flex:1;display:flex;flex-direction:column;align-items:center}
+.mbar-tip{display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--bg-card2);border:1px solid var(--blight);border-radius:5px;padding:4px 8px;font-size:10px;font-family:var(--mono);white-space:nowrap;z-index:10;pointer-events:none;color:var(--tp)}
+.mbar-wrap:hover .mbar-tip{display:block}
+.mbar-wrap:hover .mbar{opacity:.85}
 .toast{position:fixed;bottom:18px;right:18px;background:var(--bg-card2);border:1px solid var(--blight);border-radius:var(--rs);padding:9px 14px;font-size:12px;z-index:999;transform:translateY(70px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:7px;max-width:280px}
 .toast.show{transform:translateY(0);opacity:1}
 .toast i{font-size:14px}
@@ -455,6 +462,7 @@ tbody td{padding:9px 11px;vertical-align:middle}
       <div class="fdiv"></div>
       <div class="fsec ff"><i class="ti ti-crystal-ball"></i>Potencial</div>
       <div class="fgrp ff"><label class="flbl">Proyección Estimada $</label><input class="finp" id="fa-pot" type="number" placeholder="0.00"><span class="fhint">¿Cuánto estimas recibir?</span></div>
+      <div class="fgrp ff"><label class="flbl">Link del Airdrop</label><input class="finp" id="fa-url" type="url" placeholder="https://app.ejemplo.com"><span class="fhint">URL para acceder directamente al airdrop</span></div>
       <div class="fgrp ff"><label class="flbl">Notas</label><textarea class="ftxt" id="fa-no" placeholder="Observaciones..."></textarea></div>
       <div class="factions"><button class="btn" onclick="closeModal('modA')">Cancelar</button><button class="btn btn-acc" onclick="saveA()"><i class="ti ti-device-floppy"></i>Guardar</button></div>
     </div>
@@ -518,6 +526,7 @@ tbody td{padding:9px 11px;vertical-align:middle}
       <div class="fgrp"><label class="flbl">Fecha Inicio</label><input class="finp" id="fn-ds" type="date"></div>
       <div class="fgrp"><label class="flbl">Fecha Fin Est.</label><input class="finp" id="fn-de" type="date"></div>
       <div class="fgrp ff"><label class="flbl">Potencial $</label><input class="finp" id="fn-pot" type="number" placeholder="0.00"></div>
+      <div class="fgrp ff"><label class="flbl">Link del Airdrop</label><input class="finp" id="fn-url" type="url" placeholder="https://app.ejemplo.com"><span class="fhint">URL para acceder directamente al airdrop</span></div>
       <div class="fgrp ff"><label class="flbl">Notas</label><textarea class="ftxt" id="fn-no" placeholder="Detalles..."></textarea></div>
       <div class="factions"><button class="btn" onclick="closeModal('modNext')">Cancelar</button><button class="btn btn-acc" onclick="saveNext()"><i class="ti ti-device-floppy"></i>Guardar</button></div>
     </div>
@@ -536,7 +545,7 @@ function initSB() {
   try {
     sb = supabase.createClient(SB_URL, SB_KEY);
     setSS('syncing', 'Conectando...');
-    // Quick test
+    // Quick test + ensure url column exists
     sb.from('airdrops').select('id').limit(1).then(function(res) {
       if (res.error) { setSS('err', 'Error DB'); }
       else { setSS('ok', 'Supabase ✓'); }
@@ -577,7 +586,7 @@ function uid() { return Date.now().toString(36) + Math.random().toString(36).sli
 
 function a2db(a) {
   return { id:a.id, name:a.name, type:a.type||null, ecosystem:a.ecosystem||null, explorer:a.explorer||null,
-    status:a.status, points:a.points||0, tokens:a.tokens||0, premarket:a.premarket||0,
+    url:a.url||null, status:a.status, points:a.points||0, tokens:a.tokens||0, premarket:a.premarket||0,
     sold_tokens:a.soldTokens||0, sold_usd:a.soldUsd||0, invested:a.invested||0,
     potential:a.potential||0, profit:a.profit||0, date_start:a.dateStart||null,
     date_end:a.dateEnd||null, date_claim:a.dateClaim||null, notes:a.notes||null,
@@ -586,7 +595,7 @@ function a2db(a) {
 function db2a(r) {
   return { id:r.id, name:r.name, type:r.type, ecosystem:r.ecosystem, explorer:r.explorer,
     status:r.status, points:r.points||0, tokens:r.tokens||0, premarket:r.premarket||0,
-    soldTokens:r.sold_tokens||0, soldUsd:r.sold_usd||0, invested:r.invested||0,
+    url:r.url||null, soldTokens:r.sold_tokens||0, soldUsd:r.sold_usd||0, invested:r.invested||0,
     potential:r.potential||0, profit:r.profit||0, dateStart:r.date_start,
     dateEnd:r.date_end, dateClaim:r.date_claim, notes:r.notes, createdAt:r.created_at };
 }
@@ -691,7 +700,7 @@ document.querySelectorAll('.overlay').forEach(function(o) {
 function openAM(a) {
   eAid = a ? a.id : null;
   document.getElementById('modAT').textContent = a ? 'Editar Airdrop' : 'Nuevo Airdrop';
-  var flds = ['fa-n','fa-t','fa-e','fa-x','fa-s','fa-pts','fa-ds','fa-de','fa-dr','fa-tok','fa-pm','fa-st','fa-su','fa-iv','fa-pot','fa-no'];
+  var flds = ['fa-n','fa-t','fa-e','fa-x','fa-s','fa-pts','fa-ds','fa-de','fa-dr','fa-tok','fa-pm','fa-st','fa-su','fa-iv','fa-pot','fa-url','fa-no'];
   flds.forEach(function(f) { var el=document.getElementById(f); if(el) el.value=''; });
   document.getElementById('fa-s').value = 'activo';
   var pd = document.getElementById('fa-pd'); pd.textContent='$0.00'; pd.style.color='var(--gr)';
@@ -712,6 +721,7 @@ function openAM(a) {
     document.getElementById('fa-iv').value  = a.invested || '';
     document.getElementById('fa-pot').value = a.potential || '';
     document.getElementById('fa-no').value  = a.notes || '';
+    document.getElementById('fa-url').value = a.url || '';
     calcP();
   }
   document.getElementById('modA').classList.add('open');
@@ -788,7 +798,7 @@ function saveVest() {
 function openNextModal(n) {
   eNid = n ? n.id : null;
   document.getElementById('modNT').textContent = n ? 'Editar Próximo' : 'Próximo Airdrop';
-  var flds = ['fn-n','fn-t','fn-e','fn-x','fn-pts','fn-iv','fn-ds','fn-de','fn-pot','fn-no'];
+  var flds = ['fn-n','fn-t','fn-e','fn-x','fn-pts','fn-iv','fn-ds','fn-de','fn-pot','fn-url','fn-no'];
   flds.forEach(function(f) { var el=document.getElementById(f); if(el) el.value=''; });
   if (n) {
     document.getElementById('fn-n').value   = n.name || '';
@@ -801,6 +811,7 @@ function openNextModal(n) {
     document.getElementById('fn-de').value  = n.dateEnd || '';
     document.getElementById('fn-pot').value = n.potential || '';
     document.getElementById('fn-no').value  = n.notes || '';
+    document.getElementById('fn-url').value = n.url || '';
   }
   document.getElementById('modNext').classList.add('open');
 }
@@ -849,6 +860,7 @@ async function saveA() {
     dateStart: document.getElementById('fa-ds').value || null,
     dateEnd: document.getElementById('fa-de').value || null,
     dateClaim: document.getElementById('fa-dr').value || null,
+    url: document.getElementById('fa-url').value || null,
     notes: document.getElementById('fa-no').value || null,
     updatedAt: new Date().toISOString()
   };
@@ -958,6 +970,7 @@ function saveNext() {
     potential: parseFloat(document.getElementById('fn-pot').value)||0,
     dateStart: document.getElementById('fn-ds').value || null,
     dateEnd: document.getElementById('fn-de').value || null,
+    url: document.getElementById('fn-url').value || null,
     notes: document.getElementById('fn-no').value || null,
     status: 'pendiente', createdAt: new Date().toISOString()
   };
@@ -1004,7 +1017,32 @@ function deleteVest(id) {
 function filterA(f, el) {
   filt = f;
   document.querySelectorAll('.ftab').forEach(function(t) { t.classList.remove('active'); });
-  el.classList.add('active');
+  if (el) el.classList.add('active');
+  renderA();
+}
+function goPageFiltered(filter) {
+  // Navigate to Mis Airdrops and apply filter
+  var navEl = document.querySelector('[onclick*="goPage('airdrops"]');
+  goPage('airdrops', navEl);
+  filt = filter;
+  // Activate correct ftab
+  document.querySelectorAll('.ftab').forEach(function(t) {
+    t.classList.remove('active');
+    if (t.getAttribute('onclick') && t.getAttribute('onclick').indexOf("'"+filter+"'") !== -1) {
+      t.classList.add('active');
+    }
+  });
+  renderA();
+}
+function goPageFilteredType(tipo) {
+  // Navigate to Mis Airdrops and filter by type (search)
+  var navEl = document.querySelector('[onclick*="goPage('airdrops"]');
+  goPage('airdrops', navEl);
+  filt = 'all';
+  srchQ = tipo;
+  document.getElementById('srch').value = tipo;
+  document.querySelectorAll('.ftab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelector('.ftab').classList.add('active');
   renderA();
 }
 function onSearch(v) {
@@ -1116,17 +1154,19 @@ function renderDB() {
   var sts = {activo:0,pendiente:0,finalizado:0,reclamado:0};
   airdrops.forEach(function(a) { if (sts[a.status]!==undefined) sts[a.status]++; });
   document.getElementById('bySt').innerHTML =
-    '<div class="srow"><span class="bl">● Activos</span><span class="bl" style="font-family:var(--mono)">' + sts.activo + '</span></div>' +
-    '<div class="srow"><span class="yw">● Pendientes</span><span class="yw" style="font-family:var(--mono)">' + sts.pendiente + '</span></div>' +
-    '<div class="srow"><span class="dn">● Finalizados</span><span class="dn" style="font-family:var(--mono)">' + sts.finalizado + '</span></div>' +
-    '<div class="srow"><span class="up">● Reclamados</span><span class="up" style="font-family:var(--mono)">' + sts.reclamado + '</span></div>';
+    '<div class="srow srow-click" onclick="goPageFiltered('activo')" title="Ver activos"><span class="bl" style="display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:var(--tm)">↗</span> Activos</span><span class="bl" style="font-family:var(--mono);font-weight:700">' + sts.activo + '</span></div>' +
+    '<div class="srow srow-click" onclick="goPageFiltered('pendiente')" title="Ver pendientes"><span class="yw" style="display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:var(--tm)">↗</span> Pendientes</span><span class="yw" style="font-family:var(--mono);font-weight:700">' + sts.pendiente + '</span></div>' +
+    '<div class="srow srow-click" onclick="goPageFiltered('finalizado')" title="Ver finalizados"><span class="dn" style="display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:var(--tm)">↗</span> Finalizados</span><span class="dn" style="font-family:var(--mono);font-weight:700">' + sts.finalizado + '</span></div>' +
+    '<div class="srow srow-click" onclick="goPageFiltered('reclamado')" title="Ver reclamados"><span class="up" style="display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:var(--tm)">↗</span> Reclamados</span><span class="up" style="font-family:var(--mono);font-weight:700">' + sts.reclamado + '</span></div>';
 
   // By Type count
   var tm = {}, tcs = ['var(--acc)','var(--bl)','var(--pu)','var(--gr)','var(--yw)'];
   airdrops.forEach(function(a) { if(a.type) tm[a.type] = (tm[a.type]||0)+1; });
   var byTpHtml = '';
   Object.keys(tm).sort(function(a,b){return tm[b]-tm[a];}).forEach(function(t,i) {
-    byTpHtml += '<div class="srow"><span style="color:'+tcs[i%tcs.length]+'">● '+t+'</span><span style="font-family:var(--mono)">'+tm[t]+'</span></div>';
+    byTpHtml += '<div class="srow srow-click" onclick="goPageFilteredType(''+t+'')" title="Filtrar por '+t+'">' +
+      '<span style="color:'+tcs[i%tcs.length]+';display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:var(--tm)">↗</span> '+t+'</span>' +
+      '<span style="font-family:var(--mono);font-weight:700">'+tm[t]+'</span></div>';
   });
   document.getElementById('byTp').innerHTML = byTpHtml || '<div style="color:var(--tm);font-size:11px;padding:6px 0">Sin tipos</div>';
 
@@ -1137,12 +1177,12 @@ function renderDB() {
   var ptHtml = '';
   ptArr.forEach(function(e,i) {
     var col = tcs[i%tcs.length];
-    ptHtml += '<div class="srow">' +
+    ptHtml += '<div class="srow srow-click" onclick="goPageFilteredType(''+e.t+'')" title="Ver '+e.t+'">' +
       '<span style="display:flex;align-items:center;gap:5px;font-size:12px">' +
         '<span style="width:8px;height:8px;border-radius:50%;background:'+col+';flex-shrink:0;display:inline-block"></span>' +
         e.t +
       '</span>' +
-      '<span style="font-family:var(--mono);font-size:11px;font-weight:700" class="'+(e.v>=0?'up':'dn')+'">'+(e.v>=0?'+':'')+fu(e.v)+'</span>' +
+      '<span style="font-family:var(--mono);font-size:11px;font-weight:700" class="'+(e.v>=0?'up':'dn')+'">'+(e.v>=0?'+':e.v<0?'-':'')+fu(e.v)+'</span>' +
     '</div>';
   });
   document.getElementById('profitType').innerHTML = ptHtml || '<div style="color:var(--tm);font-size:11px">Sin datos</div>';
@@ -1199,8 +1239,13 @@ function renderDB() {
     var mo = buildMonthChart(y);
     var mxm = mo.reduce(function(m,v){return Math.max(m,Math.abs(v));},1);
     var mHtml = '';
-    mo.forEach(function(v) {
-      mHtml += '<div class="mcol"><div class="mbar" style="height:'+Math.abs(v)/mxm*58+'px;background:'+(v>=0?'var(--acc)':'var(--rd)')+'"></div></div>';
+    var ML = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    mo.forEach(function(v,mi) {
+      var tipTxt = ML[mi]+': '+(v>0?'+':v<0?'-':'')+fu(v);
+      mHtml += '<div class="mbar-wrap">' +
+        '<div class="mbar-tip">'+tipTxt+'</div>' +
+        '<div class="mbar" style="width:100%;height:'+Math.abs(v)/mxm*58+'px;background:'+(v>=0?'var(--acc)':'var(--rd)')+'"></div>' +
+      '</div>';
     });
     var el = document.getElementById('mChart'+y);
     if (el) el.innerHTML = mHtml;
@@ -1216,7 +1261,9 @@ function renderDB() {
   var recHtml = '';
   airdrops.slice(0,6).forEach(function(a) {
     recHtml += '<tr onclick="openDet(\'' + a.id + '\')">' +
-      '<td class="tdn">'+a.name+'</td>' +
+      '<td class="tdn" style="display:flex;align-items:center;gap:5px">'+a.name+
+        (a.url ? '<a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop" style="flex-shrink:0"><i class="ti ti-external-link"></i></a>' : '') +
+      '</td>' +
       '<td>'+(a.type?'<span class="badge bt">'+a.type+'</span>':'-')+'</td>' +
       '<td>'+etag(a.ecosystem)+'</td>' +
       '<td class="tdm">'+fu(a.invested||0)+'</td>' +
@@ -1239,7 +1286,9 @@ function renderA() {
   var html = '';
   data.forEach(function(a) {
     html += '<tr onclick="openDet(\'' + a.id + '\')">' +
-      '<td class="tdn">'+a.name+'</td>' +
+      '<td class="tdn" style="display:flex;align-items:center;gap:5px">'+a.name+
+        (a.url ? '<a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop" style="flex-shrink:0"><i class="ti ti-external-link"></i></a>' : '') +
+      '</td>' +
       '<td>'+(a.type?'<span class="badge bt">'+a.type+'</span>':'-')+'</td>' +
       '<td>'+etag(a.ecosystem)+'</td>' +
       '<td class="tdd">'+(a.explorer||'—')+'</td>' +
@@ -1293,7 +1342,9 @@ function renderC() {
   });
   autoRows.forEach(function(a) {
     html += '<tr>' +
-      '<td class="tdn">'+a.name+'</td>' +
+      '<td class="tdn" style="display:flex;align-items:center;gap:5px">'+a.name+
+        (a.url ? '<a href="'+a.url+'" target="_blank" onclick="event.stopPropagation()" class="ibtn lnk" title="Ir al airdrop" style="flex-shrink:0"><i class="ti ti-external-link"></i></a>' : '') +
+      '</td>' +
       '<td class="tdm">'+fd(a.dateClaim)+'</td>' +
       '<td class="tdm">'+(a.tokens?fn(a.tokens):'—')+'</td>' +
       '<td class="tdm">'+(a.soldTokens?fn(a.soldTokens):'—')+'</td>' +
