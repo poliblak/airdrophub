@@ -543,16 +543,17 @@ var sb = null;
 
 function initSB() {
   try {
+    if (typeof supabase === 'undefined') throw new Error('Supabase CDN not loaded');
     sb = supabase.createClient(SB_URL, SB_KEY);
     setSS('syncing', 'Conectando...');
-    // Quick test + ensure url column exists
     sb.from('airdrops').select('id').limit(1).then(function(res) {
       if (res.error) { setSS('err', 'Error DB'); }
       else { setSS('ok', 'Supabase ✓'); }
     });
   } catch(e) {
     sb = null;
-    setSS('err', 'Error');
+    setSS('err', 'Sin conexión');
+    console.warn('Supabase init failed:', e.message);
   }
 }
 function setSS(s, l) {
@@ -1032,28 +1033,25 @@ function filterA(f, el) {
   renderA();
 }
 function goPageFiltered(filter) {
-  // Navigate to Mis Airdrops and apply filter
-  var navEl = document.querySelector('[onclick*="goPage('airdrops"]');
+  var navEl = document.querySelector('.nav-item[onclick*="airdrops"]');
   goPage('airdrops', navEl);
   filt = filter;
-  // Activate correct ftab
   document.querySelectorAll('.ftab').forEach(function(t) {
     t.classList.remove('active');
-    if (t.getAttribute('onclick') && t.getAttribute('onclick').indexOf("'"+filter+"'") !== -1) {
-      t.classList.add('active');
-    }
+    var oc = t.getAttribute('onclick') || '';
+    if (oc.indexOf(filter) !== -1) t.classList.add('active');
   });
   renderA();
 }
 function goPageFilteredType(tipo) {
-  // Navigate to Mis Airdrops and filter by type (search)
-  var navEl = document.querySelector('[onclick*="goPage('airdrops"]');
+  var navEl = document.querySelector('.nav-item[onclick*="airdrops"]');
   goPage('airdrops', navEl);
   filt = 'all';
   srchQ = tipo;
   document.getElementById('srch').value = tipo;
   document.querySelectorAll('.ftab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelector('.ftab').classList.add('active');
+  var firstTab = document.querySelector('.ftab');
+  if (firstTab) firstTab.classList.add('active');
   renderA();
 }
 function onSearch(v) {
