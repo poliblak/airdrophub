@@ -577,6 +577,53 @@ function loadLocal() {
   try { vestings = JSON.parse(localStorage.getItem('ah_v') || '[]'); } catch(e) { vestings = []; }
   try { nexts    = JSON.parse(localStorage.getItem('ah_n') || '[]'); } catch(e) { nexts = []; }
 }
+
+// ═══════════════════════════════════════════════════
+// REALTIME — Supabase live sync across devices
+// ═══════════════════════════════════════════════════
+var realtimeChannel = null;
+function initRealtime() {
+  if (!sb) return;
+  // Remove existing channel if any
+  if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null; }
+
+  realtimeChannel = sb.channel('airdrophub-sync')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'airdrops' }, function(payload) {
+      var exists = airdrops.some(function(a) { return a.id === payload.new.id; });
+      if (!exists) { airdrops.unshift(db2a(payload.new)); saveLocal(); renderAll(); }
+    })
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'airdrops' }, function(payload) {
+      var idx = airdrops.findIndex(function(a) { return a.id === payload.new.id; });
+      if (idx > -1) { airdrops[idx] = db2a(payload.new); } else { airdrops.unshift(db2a(payload.new)); }
+      saveLocal(); renderAll();
+    })
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'airdrops' }, function(payload) {
+      airdrops = airdrops.filter(function(a) { return a.id !== payload.old.id; });
+      saveLocal(); renderAll();
+    })
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'claims' }, function(payload) {
+      var exists = claims.some(function(c) { return c.id === payload.new.id; });
+      if (!exists) { claims.unshift(db2c(payload.new)); saveLocal(); renderAll(); }
+    })
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'claims' }, function(payload) {
+      var idx = claims.findIndex(function(c) { return c.id === payload.new.id; });
+      if (idx > -1) { claims[idx] = db2c(payload.new); } else { claims.unshift(db2c(payload.new)); }
+      saveLocal(); renderAll();
+    })
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'claims' }, function(payload) {
+      claims = claims.filter(function(c) { return c.id !== payload.old.id; });
+      saveLocal(); renderAll();
+    })
+    .subscribe(function(status) {
+      if (status === 'SUBSCRIBED') {
+        console.log('Realtime conectado — sincronizando en tiempo real');
+        setSS('ok', 'Supabase ✓');
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+        console.warn('Realtime desconectado:', status);
+        setSS('err', 'Sync err');
+      }
+    });
+}
 function saveLocal() {
   localStorage.setItem('ah_a', JSON.stringify(airdrops));
   localStorage.setItem('ah_c', JSON.stringify(claims));
@@ -1227,18 +1274,22 @@ function renderDB() {
   // 3-year month charts using dateClaim from airdrops
   function buildMonthChart(yearStr) {
     var mo = [0,0,0,0,0,0,0,0,0,0,0,0];
-    // Use dateClaim from airdrops (primary source)
-    airdrops.forEach(function(a) {
-      if (a.dateClaim && a.dateClaim.startsWith(yearStr) && (a.soldUsd||0) > 0) {
-        var m = parseInt(a.dateClaim.slice(5,7)) - 1;
-        if (m>=0 && m<12) mo[m] += a.soldUsd||0;
-      }
-    });
-    // Also use claims table
+    // Track which airdrop IDs are covered by a claim record to avoid double-counting
+    var coveredByClaimIds = {};
     claims.forEach(function(c) {
       if (c.date && c.date.startsWith(yearStr) && (c.usdSold||0) > 0) {
         var m = parseInt(c.date.slice(5,7)) - 1;
-        if (m>=0 && m<12) mo[m] += c.usdSold||0;
+        if (m>=0 && m<12) {
+          mo[m] += c.usdSold||0;
+          coveredByClaimIds[c.airdropId] = true;
+        }
+      }
+    });
+    // Use dateClaim from airdrops ONLY if not already covered by claims table
+    airdrops.forEach(function(a) {
+      if (a.dateClaim && a.dateClaim.startsWith(yearStr) && (a.soldUsd||0) > 0 && !coveredByClaimIds[a.id]) {
+        var m = parseInt(a.dateClaim.slice(5,7)) - 1;
+        if (m>=0 && m<12) mo[m] += a.soldUsd||0;
       }
     });
     return mo;
@@ -1834,6 +1885,7 @@ async function init() {
   initSB();
   await loadAll();
   await seedRealData();
+  initRealtime();
   renderDB();
 }
 init();
