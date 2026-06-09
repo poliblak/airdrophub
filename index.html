@@ -1173,7 +1173,7 @@ function renderDB() {
   airdrops.forEach(function(a) { if(a.type) tm[a.type] = (tm[a.type]||0)+1; });
   var byTpHtml = '';
   Object.keys(tm).sort(function(a,b){return tm[b]-tm[a];}).forEach(function(t,i) {
-    byTpHtml += '<div class="srow srow-click" onclick="goPageFilteredType(''+t+'')" title="Filtrar por '+t+'">' +
+    byTpHtml += '<div class="srow srow-click" onclick="goPageFilteredType(&quot;'+t+'&quot;)" title="Filtrar por '+t+'">' +
       '<span style="color:'+tcs[i%tcs.length]+';display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:var(--tm)">↗</span> '+t+'</span>' +
       '<span style="font-family:var(--mono);font-weight:700">'+tm[t]+'</span></div>';
   });
@@ -1186,7 +1186,7 @@ function renderDB() {
   var ptHtml = '';
   ptArr.forEach(function(e,i) {
     var col = tcs[i%tcs.length];
-    ptHtml += '<div class="srow srow-click" onclick="goPageFilteredType(''+e.t+'')" title="Ver '+e.t+'">' +
+    ptHtml += '<div class="srow srow-click" onclick="goPageFilteredType(&quot;'+e.t+'&quot;)" title="Ver '+e.t+'">' +
       '<span style="display:flex;align-items:center;gap:5px;font-size:12px">' +
         '<span style="width:8px;height:8px;border-radius:50%;background:'+col+';flex-shrink:0;display:inline-block"></span>' +
         e.t +
