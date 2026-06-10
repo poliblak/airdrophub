@@ -577,16 +577,23 @@ function loadLocal() {
   try { vestings = JSON.parse(localStorage.getItem('ah_v') || '[]'); } catch(e) { vestings = []; }
   try { nexts    = JSON.parse(localStorage.getItem('ah_n') || '[]'); } catch(e) { nexts = []; }
 }
+function saveLocal() {
+  localStorage.setItem('ah_a', JSON.stringify(airdrops));
+  localStorage.setItem('ah_c', JSON.stringify(claims));
+  localStorage.setItem('ah_v', JSON.stringify(vestings));
+  localStorage.setItem('ah_n', JSON.stringify(nexts));
+}
 
 // ═══════════════════════════════════════════════════
-// REALTIME — Supabase live sync across devices
+// REALTIME — sincronización en tiempo real entre dispositivos
 // ═══════════════════════════════════════════════════
 var realtimeChannel = null;
 function initRealtime() {
   if (!sb) return;
-  // Remove existing channel if any
-  if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null; }
-
+  if (realtimeChannel) {
+    try { sb.removeChannel(realtimeChannel); } catch(e) {}
+    realtimeChannel = null;
+  }
   realtimeChannel = sb.channel('airdrophub-sync')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'airdrops' }, function(payload) {
       var exists = airdrops.some(function(a) { return a.id === payload.new.id; });
@@ -616,19 +623,12 @@ function initRealtime() {
     })
     .subscribe(function(status) {
       if (status === 'SUBSCRIBED') {
-        console.log('Realtime conectado — sincronizando en tiempo real');
         setSS('ok', 'Supabase ✓');
+        console.log('Realtime activo — sincronizando entre dispositivos');
       } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
-        console.warn('Realtime desconectado:', status);
-        setSS('err', 'Sync err');
+        setSS('err', 'Sin conexión');
       }
     });
-}
-function saveLocal() {
-  localStorage.setItem('ah_a', JSON.stringify(airdrops));
-  localStorage.setItem('ah_c', JSON.stringify(claims));
-  localStorage.setItem('ah_v', JSON.stringify(vestings));
-  localStorage.setItem('ah_n', JSON.stringify(nexts));
 }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
@@ -1274,20 +1274,20 @@ function renderDB() {
   // 3-year month charts using dateClaim from airdrops
   function buildMonthChart(yearStr) {
     var mo = [0,0,0,0,0,0,0,0,0,0,0,0];
-    // Track which airdrop IDs are covered by a claim record to avoid double-counting
-    var coveredByClaimIds = {};
+    // Registrar qué IDs ya cubiertos por claims para no contar doble
+    var cubiertos = {};
     claims.forEach(function(c) {
       if (c.date && c.date.startsWith(yearStr) && (c.usdSold||0) > 0) {
         var m = parseInt(c.date.slice(5,7)) - 1;
         if (m>=0 && m<12) {
           mo[m] += c.usdSold||0;
-          coveredByClaimIds[c.airdropId] = true;
+          cubiertos[c.airdropId] = true;
         }
       }
     });
-    // Use dateClaim from airdrops ONLY if not already covered by claims table
+    // Solo sumar de airdrops si NO está ya cubierto por claims
     airdrops.forEach(function(a) {
-      if (a.dateClaim && a.dateClaim.startsWith(yearStr) && (a.soldUsd||0) > 0 && !coveredByClaimIds[a.id]) {
+      if (a.dateClaim && a.dateClaim.startsWith(yearStr) && (a.soldUsd||0) > 0 && !cubiertos[a.id]) {
         var m = parseInt(a.dateClaim.slice(5,7)) - 1;
         if (m>=0 && m<12) mo[m] += a.soldUsd||0;
       }
