@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -571,17 +571,11 @@ var filt = 'all', srchQ = '';
 var calYear = new Date().getFullYear(), calMonth = new Date().getMonth();
 var vestDateCount = 0;
 
-function loadLocal() {
-  try { airdrops = JSON.parse(localStorage.getItem('ah_a') || '[]'); } catch(e) { airdrops = []; }
-  try { claims   = JSON.parse(localStorage.getItem('ah_c') || '[]'); } catch(e) { claims = []; }
-  try { vestings = JSON.parse(localStorage.getItem('ah_v') || '[]'); } catch(e) { vestings = []; }
-  try { nexts    = JSON.parse(localStorage.getItem('ah_n') || '[]'); } catch(e) { nexts = []; }
-}
-function saveLocal() {
-  localStorage.setItem('ah_a', JSON.stringify(airdrops));
-  localStorage.setItem('ah_c', JSON.stringify(claims));
-  localStorage.setItem('ah_v', JSON.stringify(vestings));
-  localStorage.setItem('ah_n', JSON.stringify(nexts));
+function upsertById(list, item, newestFirst) {
+  var idx = list.findIndex(function(x) { return x.id === item.id; });
+  if (idx > -1) list[idx] = item;
+  else if (newestFirst) list.unshift(item);
+  else list.push(item);
 }
 
 // ═══════════════════════════════════════════════════
@@ -595,40 +589,50 @@ function initRealtime() {
     realtimeChannel = null;
   }
   realtimeChannel = sb.channel('airdrophub-sync')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'airdrops' }, function(payload) {
-      var exists = airdrops.some(function(a) { return a.id === payload.new.id; });
-      if (!exists) { airdrops.unshift(db2a(payload.new)); saveLocal(); renderAll(); }
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'airdrops' }, function(payload) {
+      handleAirdropChange(payload);
     })
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'airdrops' }, function(payload) {
-      var idx = airdrops.findIndex(function(a) { return a.id === payload.new.id; });
-      if (idx > -1) { airdrops[idx] = db2a(payload.new); } else { airdrops.unshift(db2a(payload.new)); }
-      saveLocal(); renderAll();
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'claims' }, function(payload) {
+      handleClaimChange(payload);
     })
-    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'airdrops' }, function(payload) {
-      airdrops = airdrops.filter(function(a) { return a.id !== payload.old.id; });
-      saveLocal(); renderAll();
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'nexts' }, function(payload) {
+      handleNextChange(payload);
     })
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'claims' }, function(payload) {
-      var exists = claims.some(function(c) { return c.id === payload.new.id; });
-      if (!exists) { claims.unshift(db2c(payload.new)); saveLocal(); renderAll(); }
-    })
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'claims' }, function(payload) {
-      var idx = claims.findIndex(function(c) { return c.id === payload.new.id; });
-      if (idx > -1) { claims[idx] = db2c(payload.new); } else { claims.unshift(db2c(payload.new)); }
-      saveLocal(); renderAll();
-    })
-    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'claims' }, function(payload) {
-      claims = claims.filter(function(c) { return c.id !== payload.old.id; });
-      saveLocal(); renderAll();
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'vestings' }, function(payload) {
+      handleVestingChange(payload);
     })
     .subscribe(function(status) {
       if (status === 'SUBSCRIBED') {
-        setSS('ok', 'Supabase ✓');
-        console.log('Realtime activo — sincronizando entre dispositivos');
+        setSS('ok', 'Supabase \u2713');
+        console.log('Realtime activo - sincronizando entre dispositivos');
       } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
-        setSS('err', 'Sin conexión');
+        setSS('err', 'Sin conexion');
       }
     });
+}
+function handleAirdropChange(payload) {
+  if (payload.eventType === 'DELETE') {
+    airdrops = airdrops.filter(function(a) { return a.id !== payload.old.id; });
+    claims = claims.filter(function(c) { return c.airdropId !== payload.old.id; });
+  } else {
+    upsertById(airdrops, db2a(payload.new), true);
+  }
+  renderAll();
+}
+function handleClaimChange(payload) {
+  if (payload.eventType === 'DELETE') claims = claims.filter(function(c) { return c.id !== payload.old.id; });
+  else upsertById(claims, db2c(payload.new), true);
+  renderAll();
+}
+function handleNextChange(payload) {
+  if (payload.eventType === 'DELETE') nexts = nexts.filter(function(n) { return n.id !== payload.old.id; });
+  else upsertById(nexts, db2n(payload.new), true);
+  renderAll();
+}
+function handleVestingChange(payload) {
+  if (payload.eventType === 'DELETE') vestings = vestings.filter(function(v) { return v.id !== payload.old.id; });
+  else upsertById(vestings, db2v(payload.new), true);
+  renderAll();
 }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
@@ -657,28 +661,47 @@ function db2c(r) {
     tokensClaimed:r.tokens_claimed||0, tokensSold:r.tokens_sold||0, usdSold:r.usd_sold||0,
     fee:r.fee||0, net:r.net||0, notes:r.notes, createdAt:r.created_at };
 }
+function n2db(n) {
+  return { id:n.id, name:n.name, type:n.type||null, ecosystem:n.ecosystem||null, explorer:n.explorer||null, url:n.url||null,
+    points:n.points||0, invested:n.invested||0, potential:n.potential||0,
+    date_start:n.dateStart||null, date_end:n.dateEnd||null, notes:n.notes||null,
+    status:n.status||'pendiente' };
+}
+function db2n(r) {
+  return { id:r.id, name:r.name, type:r.type, ecosystem:r.ecosystem, explorer:r.explorer,
+    points:r.points||0, invested:r.invested||0, potential:r.potential||0,
+    dateStart:r.date_start, dateEnd:r.date_end, url:r.url||null, notes:r.notes,
+    status:r.status||'pendiente', createdAt:r.created_at };
+}
+function v2db(v) {
+  return { id:v.id, airdrop_id:v.airdropId, airdrop_name:v.airdropName, dates:v.dates||[] };
+}
+function db2v(r) {
+  return { id:r.id, airdropId:r.airdrop_id, airdropName:r.airdrop_name,
+    dates:Array.isArray(r.dates) ? r.dates : [], createdAt:r.created_at };
+}
 
 async function loadAll() {
-  if (sb) {
-    setSS('syncing', 'Cargando...');
-    try {
-      var ra = await sb.from('airdrops').select('*').order('created_at', {ascending: false});
-      var rc = await sb.from('claims').select('*').order('created_at', {ascending: false});
-      if (ra.error || rc.error) throw ra.error || rc.error;
-      airdrops = (ra.data || []).map(db2a);
-      claims   = (rc.data || []).map(db2c);
-      loadLocal();
-      vestings = JSON.parse(localStorage.getItem('ah_v') || '[]');
-      nexts    = JSON.parse(localStorage.getItem('ah_n') || '[]');
-      localStorage.setItem('ah_a', JSON.stringify(airdrops));
-      localStorage.setItem('ah_c', JSON.stringify(claims));
-      setSS('ok', 'Supabase ✓');
-    } catch(e) {
-      setSS('err', 'Sin conexión');
-      loadLocal();
-    }
-  } else {
-    loadLocal();
+  if (!sb) {
+    setSS('err', 'Sin conexion');
+    airdrops = []; claims = []; vestings = []; nexts = [];
+    return;
+  }
+  setSS('syncing', 'Cargando...');
+  try {
+    var ra = await sb.from('airdrops').select('*').order('created_at', {ascending: false});
+    var rc = await sb.from('claims').select('*').order('created_at', {ascending: false});
+    var rn = await sb.from('nexts').select('*').order('created_at', {ascending: false});
+    var rv = await sb.from('vestings').select('*').order('created_at', {ascending: false});
+    if (ra.error || rc.error || rn.error || rv.error) throw ra.error || rc.error || rn.error || rv.error;
+    airdrops = (ra.data || []).map(db2a);
+    claims   = (rc.data || []).map(db2c);
+    nexts    = (rn.data || []).map(db2n);
+    vestings = (rv.data || []).map(db2v);
+    setSS('ok', 'Supabase \u2713');
+  } catch(e) {
+    setSS('err', 'Error DB');
+    console.error('loadAll error:', e);
   }
 }
 
@@ -701,7 +724,6 @@ async function upsA(a) {
       setSS('err', 'Sync err: ' + (e.message||''));
     }
   }
-  saveLocal();
 }
 async function upsC(c) {
   if (sb) {
@@ -710,18 +732,37 @@ async function upsC(c) {
       if (res.error) throw res.error;
     } catch(e) {}
   }
-  saveLocal();
 }
 async function delA(id) {
   if (sb) {
     await sb.from('airdrops').delete().eq('id', id);
     await sb.from('claims').delete().eq('airdrop_id', id);
   }
-  saveLocal();
 }
 async function delC(id) {
   if (sb) { await sb.from('claims').delete().eq('id', id); }
-  saveLocal();
+}
+async function upsV(v) {
+  if (!sb) { setSS('err', 'Sin conexion'); return; }
+  var res = await sb.from('vestings').upsert(v2db(v));
+  if (res.error) { setSS('err', 'Sync err'); throw res.error; }
+  setSS('ok', 'Supabase \u2713');
+}
+async function delV(id) {
+  if (!sb) { setSS('err', 'Sin conexion'); return; }
+  var res = await sb.from('vestings').delete().eq('id', id);
+  if (res.error) { setSS('err', 'Sync err'); throw res.error; }
+}
+async function upsN(n) {
+  if (!sb) { setSS('err', 'Sin conexion'); return; }
+  var res = await sb.from('nexts').upsert(n2db(n));
+  if (res.error) { setSS('err', 'Sync err'); throw res.error; }
+  setSS('ok', 'Supabase \u2713');
+}
+async function delN(id) {
+  if (!sb) { setSS('err', 'Sin conexion'); return; }
+  var res = await sb.from('nexts').delete().eq('id', id);
+  if (res.error) { setSS('err', 'Sync err'); throw res.error; }
 }
 
 // ═══════════════════════════════════════════════════
@@ -836,7 +877,7 @@ function addVestDate(d) {
   document.getElementById('vestDates').appendChild(div);
 }
 
-function saveVest() {
+async function saveVest() {
   var aid = document.getElementById('fv-a').value;
   if (!aid) { toast('Selecciona un airdrop', 'err'); return; }
   var dates = [];
@@ -850,8 +891,7 @@ function saveVest() {
   airdrops.forEach(function(a) { if (a.id === aid) aName = a.name; });
   var v = { id: eVid || uid(), airdropId: aid, airdropName: aName, dates: dates, createdAt: new Date().toISOString() };
   if (eVid) { var i = vestings.findIndex(function(x) { return x.id===eVid; }); if (i>-1) vestings[i]=v; }
-  else vestings.unshift(v);
-  saveLocal(); closeModal('modVest'); toast('Vesting guardado ✓'); renderVest();
+  else vestings.unshift(v); await upsV(v); closeModal('modVest'); toast('Vesting guardado \u2713'); renderVest();
 }
 
 function openNextModal(n) {
@@ -978,7 +1018,6 @@ async function saveC() {
   await upsC(c);
   var aObj = airdrops.find(function(a) { return a.id===aid; });
   if (aObj) await upsA(aObj);
-  saveLocal();
   closeModal('modC');
   toast('Reclamo guardado y sincronizado ✓');
   renderAll();
@@ -1016,7 +1055,7 @@ function syncA(aid) {
 // ═══════════════════════════════════════════════════
 // NEXT AIRDROPS
 // ═══════════════════════════════════════════════════
-function saveNext() {
+async function saveNext() {
   var name = document.getElementById('fn-n').value.trim();
   if (!name) { toast('El nombre es obligatorio', 'err'); return; }
   var n = {
@@ -1036,8 +1075,7 @@ function saveNext() {
   if (eNid) {
     var i = nexts.findIndex(function(x) { return x.id===eNid; });
     if (i > -1) nexts[i] = n;
-  } else nexts.unshift(n);
-  saveLocal(); closeModal('modNext'); toast('Guardado ✓'); renderNext();
+  } else nexts.unshift(n); await upsN(n); closeModal('modNext'); toast('Guardado \u2713'); renderNext();
 }
 
 async function promoteNext(id) {
@@ -1053,21 +1091,21 @@ async function promoteNext(id) {
   nexts = nexts.filter(function(x) { return x.id!==id; });
   airdrops.unshift(a);
   await upsA(a);
-  saveLocal();
+  await delN(id);
   toast(n.name + ' movido a Mis Airdrops ✓');
   renderNext(); renderDB();
   document.getElementById('navCnt').textContent = airdrops.length;
 }
 
-function deleteNext(id) {
+async function deleteNext(id) {
   if (!confirm('¿Eliminar?')) return;
   nexts = nexts.filter(function(x) { return x.id!==id; });
-  saveLocal(); renderNext(); toast('Eliminado');
+  await delN(id); renderNext(); toast('Eliminado');
 }
-function deleteVest(id) {
+async function deleteVest(id) {
   if (!confirm('¿Eliminar vesting?')) return;
   vestings = vestings.filter(function(x) { return x.id!==id; });
-  saveLocal(); renderVest(); toast('Eliminado');
+  await delV(id); renderVest(); toast('Eliminado');
 }
 
 // ═══════════════════════════════════════════════════
@@ -1671,7 +1709,7 @@ function renderAll() {
 // SEED REAL DATA
 // ═══════════════════════════════════════════════════
 async function seedRealData() {
-  // Only seed if truly empty (Supabase returned nothing AND localStorage empty)
+  // Only seed if Supabase is empty
   if (airdrops.length > 0) return;
   // Double-check Supabase directly
   if (sb) {
@@ -1683,7 +1721,6 @@ async function seedRealData() {
       if (ra.data && ra.data.length > 0) {
         airdrops = ra.data.map(db2a);
         claims = (rc.data||[]).map(db2c);
-        saveLocal();
         return;
       }
     }
@@ -1860,7 +1897,6 @@ async function seedRealData() {
   claims = [];
   console.log('Seeding', data.length, 'airdrops to Supabase...');
   for (var i=0; i<data.length; i++) await upsA(data[i]);
-  saveLocal();
   console.log('Seed complete');
 }
 
@@ -1892,3 +1928,6 @@ init();
 </script>
 </body>
 </html>
+
+
+
