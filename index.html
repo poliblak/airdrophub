@@ -713,8 +713,10 @@ function handleAirdropChange(payload) {
   renderAll();
 }
 function handleClaimChange(payload) {
+  var aid = payload.eventType === 'DELETE' ? payload.old.airdrop_id : payload.new.airdrop_id;
   if (payload.eventType === 'DELETE') claims = claims.filter(function(c) { return c.id !== payload.old.id; });
   else upsertById(claims, db2c(payload.new), true);
+  if (aid) { reconcileVestingForAirdrop(aid); syncA(aid); }
   renderAll();
 }
 function handleNextChange(payload) {
@@ -723,8 +725,10 @@ function handleNextChange(payload) {
   renderAll();
 }
 function handleVestingChange(payload) {
+  var aid = payload.eventType === 'DELETE' ? payload.old.airdrop_id : payload.new.airdrop_id;
   if (payload.eventType === 'DELETE') vestings = vestings.filter(function(v) { return v.id !== payload.old.id; });
   else upsertById(vestings, db2v(payload.new), true);
+  if (aid) { reconcileVestingForAirdrop(aid); syncA(aid); }
   renderAll();
 }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
@@ -992,6 +996,7 @@ async function saveVest() {
     if (!aid) { toast('Selecciona un airdrop', 'err'); return; }
     var dates = [];
     var prev = eVid ? vestings.find(function(x) { return x.id === eVid; }) : null;
+    var prevAid = prev ? prev.airdropId : null;
     document.querySelectorAll('[id^="vd-date-"]').forEach(function(inp) {
       var n = inp.id.split('-').pop();
       var tokEl = document.getElementById('vd-tok-' + n);
@@ -1008,9 +1013,22 @@ async function saveVest() {
     var v = { id: eVid || uid(), airdropId: aid, airdropName: aName, dates: dates, createdAt: new Date().toISOString() };
     var saved = await upsV(v);
     upsertById(vestings, saved, true);
+    var changedVestings = reconcileVestingForAirdrop(aid);
+    syncA(aid);
+    if (prevAid && prevAid !== aid) {
+      changedVestings = changedVestings.concat(reconcileVestingForAirdrop(prevAid));
+      syncA(prevAid);
+    }
+    await persistVestingList(changedVestings);
+    var aObj = airdrops.find(function(a) { return a.id===aid; });
+    if (aObj) await upsA(aObj);
+    if (prevAid && prevAid !== aid) {
+      var prevAObj = airdrops.find(function(a) { return a.id===prevAid; });
+      if (prevAObj) await upsA(prevAObj);
+    }
     closeModal('modVest');
     toast('Vesting guardado OK');
-    renderVest();
+    renderAll();
   } catch(e) {
     console.error('saveVest error:', e);
     setSS('err', 'Sync err');
@@ -1112,6 +1130,44 @@ async function deleteA(id) {
 // ═══════════════════════════════════════════════════
 // SAVE / DELETE CLAIM
 // ═══════════════════════════════════════════════════
+function vestingDateClaimedByClaim(vd, relClaims) {
+  var vDate = normalizeDateValue(vd.date);
+  var vTok = parseFloat(vd.tokens) || 0;
+  var dateClaims = relClaims.filter(function(c) {
+    var cDate = normalizeDateValue(c.date);
+    return !!vDate && cDate === vDate;
+  });
+  if (!dateClaims.length) return false;
+  var claimedTok = dateClaims.reduce(function(s,c) { return s + (parseFloat(c.tokensClaimed)||0); }, 0);
+  if (vTok <= 0) return claimedTok > 0 || dateClaims.some(function(c) { return (c.usdSold||0) > 0; });
+  return Math.abs(claimedTok - vTok) <= 0.000001 || claimedTok >= vTok;
+}
+function reconcileVestingForAirdrop(aid) {
+  var changed = [];
+  var relClaims = claims.filter(function(c) { return c.airdropId === aid; });
+  vestings.forEach(function(v) {
+    if (v.airdropId !== aid || !Array.isArray(v.dates)) return;
+    var touched = false;
+    v.dates = v.dates.map(function(d) {
+      var nextClaimed = vestingDateClaimedByClaim(d, relClaims);
+      if (!!d.claimed !== nextClaimed) touched = true;
+      return { date: normalizeDateValue(d.date), tokens: parseFloat(d.tokens)||0, claimed: nextClaimed };
+    });
+    if (touched) changed.push(v);
+  });
+  return changed;
+}
+function airdropHasVesting(aid) {
+  return vestings.some(function(v) { return v.airdropId === aid && Array.isArray(v.dates) && v.dates.length > 0; });
+}
+function airdropVestingComplete(aid) {
+  var rel = vestings.filter(function(v) { return v.airdropId === aid && Array.isArray(v.dates) && v.dates.length > 0; });
+  if (!rel.length) return false;
+  return rel.every(function(v) { return v.dates.every(function(d) { return !!d.claimed; }); });
+}
+async function persistVestingList(list) {
+  for (var i=0; i<list.length; i++) await upsV(list[i]);
+}
 async function saveC() {
   var aid  = document.getElementById('fc-a').value;
   var date = document.getElementById('fc-d').value;
@@ -1120,6 +1176,7 @@ async function saveC() {
   var f = parseFloat(document.getElementById('fc-f').value)||0;
   var aName = '';
   airdrops.forEach(function(a) { if (a.id===aid) aName=a.name; });
+  var oldClaim = eCid ? claims.find(function(x) { return x.id===eCid; }) : null;
   var c = {
     id: eCid || uid(), airdropId: aid, airdropName: aName, date: date,
     tokensClaimed: parseFloat(document.getElementById('fc-tc').value)||0,
@@ -1132,16 +1189,20 @@ async function saveC() {
     var i = claims.findIndex(function(x) { return x.id===eCid; });
     if (i > -1) claims[i] = c;
   } else { claims.unshift(c); }
+  var changedVestings = reconcileVestingForAirdrop(aid);
   syncA(aid);
-  // mark vesting
-  vestings.forEach(function(v) {
-    if (v.airdropId === aid) {
-      v.dates.forEach(function(d) { if (d.date === date && !d.claimed) { d.claimed = true; } });
-    }
-  });
+  if (oldClaim && oldClaim.airdropId !== aid) {
+    changedVestings = changedVestings.concat(reconcileVestingForAirdrop(oldClaim.airdropId));
+    syncA(oldClaim.airdropId);
+  }
   await upsC(c);
+  await persistVestingList(changedVestings);
   var aObj = airdrops.find(function(a) { return a.id===aid; });
   if (aObj) await upsA(aObj);
+  if (oldClaim && oldClaim.airdropId !== aid) {
+    var oldAObj = airdrops.find(function(a) { return a.id===oldClaim.airdropId; });
+    if (oldAObj) await upsA(oldAObj);
+  }
   closeModal('modC');
   toast('Reclamo guardado y sincronizado OK');
   renderAll();
@@ -1152,7 +1213,9 @@ async function deleteC(id) {
   var c = claims.find(function(x) { return x.id===id; });
   claims = claims.filter(function(x) { return x.id!==id; });
   if (c) {
+    var changedVestings = reconcileVestingForAirdrop(c.airdropId);
     syncA(c.airdropId);
+    await persistVestingList(changedVestings);
     var aObj = airdrops.find(function(a) { return a.id===c.airdropId; });
     if (aObj) await upsA(aObj);
   }
@@ -1170,9 +1233,16 @@ function syncA(aid) {
   if (i > -1) {
     airdrops[i].soldUsd   = tu;
     airdrops[i].soldTokens= tt;
-    if (tc > 0) airdrops[i].tokens = Math.max(airdrops[i].tokens||0, tc);
+    if (tc > 0 || rel.length) airdrops[i].tokens = tc;
     airdrops[i].profit    = tu - (airdrops[i].invested||0);
-    if (tu > 0 && airdrops[i].status !== 'reclamado') airdrops[i].status = 'reclamado';
+    airdrops[i].dateClaim = rel.length ? rel.map(function(c){return normalizeDateValue(c.date);}).filter(Boolean).sort().pop() : null;
+    if (airdropHasVesting(aid)) {
+      airdrops[i].status = airdropVestingComplete(aid) ? 'reclamado' : 'finalizado';
+    } else if (tu > 0 || tc > 0) {
+      airdrops[i].status = 'reclamado';
+    } else if (airdrops[i].status === 'reclamado') {
+      airdrops[i].status = 'finalizado';
+    }
   }
 }
 
@@ -1228,8 +1298,14 @@ async function deleteNext(id) {
 }
 async function deleteVest(id) {
   if (!confirm('¿Eliminar vesting?')) return;
+  var v = vestings.find(function(x) { return x.id===id; });
   vestings = vestings.filter(function(x) { return x.id!==id; });
-  await delV(id); renderVest(); toast('Eliminado');
+  if (v) {
+    syncA(v.airdropId);
+    var aObj = airdrops.find(function(a) { return a.id===v.airdropId; });
+    if (aObj) await upsA(aObj);
+  }
+  await delV(id); renderAll(); toast('Eliminado');
 }
 
 // ═══════════════════════════════════════════════════
