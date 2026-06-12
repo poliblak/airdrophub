@@ -126,7 +126,9 @@ tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:
 tbody tr:hover{background:var(--bg-hover)}
 tbody tr:last-child{border-bottom:none}
 tbody td{padding:9px 11px;vertical-align:middle}
-.tdn{font-weight:600;font-size:13px}
+.tdn{font-weight:600;font-size:11.5px;letter-spacing:0;line-height:1.25}
+.tdn span{max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+.airdrop-scroll .tdn span{max-width:190px}
 .tdm{font-family:var(--mono);font-size:11px}
 .tdd{color:var(--ts);font-size:11px}
 .badge{display:inline-flex;align-items:center;gap:2px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
@@ -376,6 +378,9 @@ body{
 .ftab.active{background:rgba(156,239,227,.12);color:var(--acc2);border-color:rgba(156,239,227,.26)}
 thead th{background:#0f1113;color:#77716b;border-bottom:1px solid rgba(255,255,255,.07);padding:10px 12px}
 tbody td{padding:10px 12px}
+.tdn{font-size:11.5px;font-weight:600}
+.tdn span{max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.airdrop-scroll .tdn span{max-width:190px}
 tbody tr{border-bottom:1px solid rgba(255,255,255,.045)}
 tbody tr:hover{background:rgba(156,239,227,.035)}
 .badge{border-radius:8px;padding:3px 8px}
@@ -482,19 +487,40 @@ tbody tr:hover{background:rgba(156,239,227,.035)}
 .market-ticker .ssub{font-size:9px}
 .market-ticker .mini-spark{height:22px;margin-top:5px}
 .market-ticker .mini-spark svg{height:22px}
-.market-main{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(250px,.8fr) minmax(250px,.8fr);gap:16px;margin-bottom:18px}
+.market-ticker .mini-spark{display:none}
+.market-ticker .scard{min-height:68px}
+.market-main{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(250px,.8fr) minmax(250px,.8fr);gap:16px;margin-bottom:18px;align-items:start}
 .market-main .card,.market-lower .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border-color:rgba(255,255,255,.055);box-shadow:0 14px 38px rgba(0,0,0,.24)}
-.chart-panel{min-height:300px}
-.hero-chart{height:190px;margin-top:6px}
-.hero-chart .month-line{height:190px}
+.chart-panel{min-height:250px}
+.hero-chart{height:150px;margin-top:4px}
+.hero-chart .month-line{height:118px}
 .hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid rgba(255,255,255,.055);border-radius:8px;overflow:hidden;margin-top:12px}
 .hero-stat{padding:9px 10px;border-right:1px solid rgba(255,255,255,.045)}
 .hero-stat:last-child{border-right:0}
 .hero-stat-label{font-size:9px;text-transform:uppercase;color:var(--tm);letter-spacing:.07em}
 .hero-stat-value{font-family:var(--mono);font-size:11px;color:var(--tp);margin-top:3px}
 .panel-note{font-size:10px;color:var(--tm);font-family:var(--mono)}
-.year-select{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:9px;color:var(--ts);font-family:var(--mono);font-size:10px;padding:5px 8px;outline:none}
-.year-select:focus{border-color:rgba(208,106,28,.38);color:var(--tp)}
+.year-select{
+  appearance:none;
+  -webkit-appearance:none;
+  background:
+    linear-gradient(45deg,transparent 50%,var(--tp) 50%) right 12px center/5px 5px no-repeat,
+    linear-gradient(135deg,var(--tp) 50%,transparent 50%) right 7px center/5px 5px no-repeat,
+    #101214;
+  border:1px solid rgba(208,106,28,.55);
+  border-radius:9px;
+  color:var(--tp);
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:700;
+  line-height:1;
+  min-width:62px;
+  padding:8px 24px 8px 10px;
+  outline:none;
+}
+.year-select:focus{border-color:rgba(208,106,28,.85);box-shadow:0 0 0 3px rgba(208,106,28,.12)}
+.year-select option{background:#101214;color:var(--tp)}
+.year-select option:checked{background:var(--acc);color:#fff}
 .chart-tools{display:flex;align-items:center;gap:8px}
 .summary-big{font-family:var(--mono);font-size:30px;font-weight:700;letter-spacing:-.04em;color:var(--tp);margin-top:10px}
 .summary-sub{font-size:10px;color:var(--tm);margin-top:3px}
@@ -508,20 +534,29 @@ tbody tr:hover{background:rgba(156,239,227,.035)}
 .range-fill{position:absolute;left:0;top:0;height:4px;border-radius:10px;background:linear-gradient(90deg,var(--acc),var(--chart-ink))}
 .range-dot{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:#d8d2ca;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(216,210,202,.08)}
 .market-lower{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.72fr);gap:16px;margin-bottom:18px}
+.market-lower-three{grid-template-columns:minmax(430px,1.25fr) minmax(330px,.72fr) minmax(420px,.95fr);align-items:start}
+.market-lower-three .card{height:100%}
+.market-lower-three .eco-card .eco-chart{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.market-lower-three .eco-card .eco-tile{padding:9px 10px}
+.market-lower-three .eco-card .tscroll{max-height:250px;overflow:auto}
 .market-lower .top-card{grid-row:auto}
 .market-lower .t10item{padding:8px 0}
 .type-profit-row{grid-template-columns:minmax(92px,.9fr) minmax(110px,1fr) minmax(76px,.55fr)}
 .type-profit-bar{height:7px;border-radius:20px;background:rgba(255,255,255,.055);overflow:hidden}
 .type-profit-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--chart-ink),var(--acc))}
-.type-profit-row{grid-template-columns:minmax(96px,.95fr) 52px minmax(84px,.7fr) minmax(92px,1fr)}
+.type-profit-row{grid-template-columns:minmax(96px,.95fr) 52px minmax(84px,.7fr) minmax(108px,1fr)}
 .type-profit-head{cursor:default;color:var(--tm);font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
 .type-profit-head:hover{background:transparent}
-.type-profit-mini{height:24px;opacity:.78}
-.type-profit-mini svg{width:100%;height:24px;display:block;overflow:visible}
+.type-stack-bar{position:relative;height:18px;border-radius:999px;background:rgba(255,255,255,.045);overflow:hidden}
+.type-total-bar,.type-claimed-bar{position:absolute;left:0;border-radius:999px;transition:width .2s ease,opacity .16s ease}
+.type-total-bar{top:3px;height:12px;background:rgba(216,210,202,.22)}
+.type-claimed-bar{top:6px;height:6px;background:linear-gradient(90deg,var(--acc),rgba(216,210,202,.78));box-shadow:0 0 12px rgba(208,106,28,.12)}
+.type-profit-row:hover .type-total-bar{opacity:.9}
+.type-profit-row:hover .type-claimed-bar{filter:brightness(1.08)}
 .yr3grid{display:none}
 @media(max-width:1100px){
   .market-main{grid-template-columns:1fr}
-  .market-lower{grid-template-columns:1fr}
+  .market-lower,.market-lower-three{grid-template-columns:1fr}
 }
 @media(max-width:700px){
   .market-ticker{grid-template-columns:repeat(2,minmax(0,1fr))!important}
@@ -529,8 +564,8 @@ tbody tr:hover{background:rgba(156,239,227,.035)}
   .hero-stats,.summary-grid{grid-template-columns:1fr}
   .hero-stat,.summary-mini{border-right:0;border-bottom:1px solid rgba(255,255,255,.045)}
   .hero-stat:last-child,.summary-mini:last-child{border-bottom:0}
-  .hero-chart{height:160px}
-  .hero-chart .month-line{height:160px}
+  .hero-chart{height:142px}
+  .hero-chart .month-line{height:110px}
 }
 
 /* Dashboard final tuning from dark token theme */
@@ -578,8 +613,8 @@ tbody tr:hover{background:rgba(156,239,227,.035)}
 .eco-tile div[style*="vendido"]{gap:6px;line-height:1.25}
 .chart-panel{position:relative;overflow:hidden}
 .chart-panel::after{content:'';position:absolute;left:16px;right:16px;top:52px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);pointer-events:none}
-.hero-chart{height:214px;margin:2px -4px 0}
-.hero-chart .month-line{height:214px}
+.hero-chart{height:150px;margin:2px 0 0}
+.hero-chart .month-line{height:118px}
 .month-line{shape-rendering:geometricPrecision}
 .neon-grid{stroke:var(--chart-grid);stroke-width:.34;stroke-dasharray:1.5 3;opacity:.8}
 .premium-chart-area{opacity:.82}
@@ -592,6 +627,18 @@ tbody tr:hover{background:rgba(156,239,227,.035)}
 .premium-point:hover .premium-hover-line{opacity:1}
 .premium-point:hover .premium-chart-dot{r:2.4;opacity:1;stroke:var(--acc)}
 .neon-axis{fill:#6f6963;font-size:3.65px;letter-spacing:0}
+.month-chart-wrap{position:relative;height:100%;padding:4px 42px 24px 20px}
+.month-chart-wrap .month-line{position:absolute;left:0;right:0;top:0;width:100%;height:calc(100% - 22px)}
+.chart-month-labels{position:absolute;left:20px;right:42px;bottom:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:0;color:#8a847e;font-size:11px;line-height:1;text-align:center;white-space:nowrap}
+.chart-month-labels span{font-weight:500;letter-spacing:0}
+.chart-y-axis{position:absolute;right:5px;top:11px;bottom:25px;display:flex;flex-direction:column;justify-content:space-between;color:#8a847e;font-family:var(--mono);font-size:11px;line-height:1}
+.chart-hotspot{position:absolute;top:5px;bottom:24px;width:8.333%;transform:translateX(-50%);cursor:crosshair}
+.chart-hotspot::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,.06);opacity:0;transition:opacity .14s ease}
+.chart-hotspot::after{content:attr(data-tip);position:absolute;left:50%;top:8px;transform:translate(-50%,-6px);background:#0b0c0e;border:1px solid rgba(255,255,255,.10);box-shadow:0 14px 34px rgba(0,0,0,.42);border-radius:8px;padding:6px 8px;color:var(--tp);font-family:var(--mono);font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .14s ease,transform .14s ease;z-index:5}
+.chart-hotspot:hover::before,.chart-hotspot:hover::after{opacity:1}
+.chart-hotspot:hover::after{transform:translate(-50%,0)}
+.hero-stats{margin-top:8px}
+.hero-stat{padding:8px 10px}
 .hero-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
 @media(max-width:900px){
   .eco-chart{grid-template-columns:repeat(2,minmax(0,1fr))!important}
@@ -599,11 +646,14 @@ tbody tr:hover{background:rgba(156,239,227,.035)}
 @media(max-width:700px){
   .status-total-card{min-height:84px}
   .status-total-card .donut-total{font-size:32px}
-  .hero-chart{height:176px}
-  .hero-chart .month-line{height:176px}
+  .hero-chart{height:142px}
+  .hero-chart .month-line{height:110px}
   .hero-stats{grid-template-columns:1fr}
+  .chart-month-labels{font-size:10px;left:14px;right:34px}
+  .chart-y-axis{right:2px;font-size:10px}
+  .month-chart-wrap{padding-left:14px;padding-right:34px}
   .type-profit-row{grid-template-columns:minmax(90px,1fr) 44px minmax(74px,.7fr)}
-  .type-profit-mini{grid-column:1/-1}
+  .type-stack-bar{grid-column:1/-1}
 }
 </style>
 </head>
@@ -689,18 +739,18 @@ tbody tr:hover{background:rgba(156,239,227,.035)}
         <div id="bySt"></div>
       </div>
     </div>
-    <div class="market-lower">
+    <div class="market-lower market-lower-three">
       <div class="card top-card"><div class="card-hd"><span class="card-tt"><i class="ti ti-chart-bar"></i> Top Airdrops</span></div><div id="top10"></div></div>
       <div class="card"><div class="card-hd"><span class="card-tt">Resumen por Tipo</span></div><div id="typeProfit" class="type-profit-grid"></div></div>
-    </div>
-    <!-- Eco summary table -->
-    <div class="card" style="margin-bottom:13px">
+      <!-- Eco summary table -->
+      <div class="card eco-card" style="margin-bottom:0">
       <div class="card-hd"><span class="card-tt">Resumen por Ecosistema</span></div>
       <div id="ecoChart" class="eco-chart"></div>
       <div class="tscroll"><table style="font-size:11px">
         <thead><tr><th>Ecosistema</th><th style="text-align:center">Airdrops</th><th style="text-align:right">Invertido</th><th style="text-align:right">Venta Total</th><th style="text-align:right">Profit</th><th style="text-align:right">Multi</th></tr></thead>
         <tbody id="ecoSummaryTbl"></tbody>
       </table></div>
+      </div>
     </div>
     <!-- 3 year month charts -->
     <div class="yr3grid">
@@ -1965,19 +2015,16 @@ function renderMonthLine(id, values) {
   var gid = 'gm' + id.replace(/[^a-zA-Z0-9]/g,'');
   var ML = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   var dots = pts.map(function(p,i){
-    var m = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][i];
-    return '<g class="premium-point"><line x1="'+p.x.toFixed(1)+'" y1="14" x2="'+p.x.toFixed(1)+'" y2="57" class="premium-hover-line"></line><circle class="premium-chart-dot" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="1.5" fill="var(--bg-card)" stroke="var(--chart-ink)" stroke-width=".8"><title>'+m+': '+(p.v>0?'+':'')+fu(p.v)+'</title></circle></g>';
-  }).join('');
-  var labels = ML.map(function(m,i) {
-    var x = 8 + (i/11)*78;
-    return '<text class="neon-axis" x="'+x.toFixed(1)+'" y="68" text-anchor="middle">'+m+'</text>';
+    return '<g class="premium-point"><circle class="premium-chart-dot" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="1.45" fill="var(--bg-card)" stroke="var(--chart-ink)" stroke-width=".8"></circle></g>';
   }).join('');
   var scaleVals = [500,300,100,70,50,30,10];
-  var scale = scaleVals.map(function(v,i) {
-    var y = 16 + i * (39 / (scaleVals.length - 1));
-    return '<text class="neon-axis axis-amount" x="91" y="'+(y+1.4).toFixed(1)+'" text-anchor="start">'+v+'</text>';
+  var monthLabels = ML.map(function(m){ return '<span>'+m+'</span>'; }).join('');
+  var axisLabels = scaleVals.map(function(v){ return '<span>'+v+'</span>'; }).join('');
+  var hotspots = pts.map(function(p,i) {
+    var left = 20 + (i/11) * 80;
+    return '<span class="chart-hotspot" style="left:'+left.toFixed(3)+'%" data-tip="'+ML[i]+' · '+fu(p.v)+'"></span>';
   }).join('');
-  el.innerHTML = '<svg class="month-line" viewBox="0 0 100 72" preserveAspectRatio="none">' +
+  el.innerHTML = '<div class="month-chart-wrap"><svg class="month-line" viewBox="0 0 100 62" preserveAspectRatio="none">' +
     '<defs>' +
       '<linearGradient id="'+gid+'Stroke" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="rgba(216,210,202,.72)"/><stop offset="55%" stop-color="var(--chart-ink)"/><stop offset="100%" stop-color="var(--acc)"/></linearGradient>' +
       '<linearGradient id="'+gid+'Fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(216,210,202,.18)"/><stop offset="58%" stop-color="rgba(208,106,28,.055)"/><stop offset="100%" stop-color="rgba(208,106,28,0)"/></linearGradient>' +
@@ -1985,7 +2032,7 @@ function renderMonthLine(id, values) {
     '<line class="neon-grid" x1="7" y1="16" x2="87" y2="16"></line><line class="neon-grid" x1="7" y1="29" x2="87" y2="29"></line><line class="neon-grid" x1="7" y1="42" x2="87" y2="42"></line><line class="neon-grid" x1="7" y1="55" x2="87" y2="55"></line>' +
     '<path class="premium-chart-area" d="'+areaD+'" fill="url(#'+gid+'Fill)"></path>' +
     '<path class="neon-month-line premium-chart-line" d="'+pathD+'" fill="none" stroke="url(#'+gid+'Stroke)" stroke-width="1.14" stroke-linecap="round" stroke-linejoin="round"></path>' +
-    dots + labels + scale + '</svg>';
+    dots + '</svg><div class="chart-y-axis">'+axisLabels+'</div><div class="chart-month-labels">'+monthLabels+'</div>'+hotspots+'</div>';
 }
 function tinyLineSvg(values, color) {
   var nums = values.map(function(v){ return Number(v)||0; });
@@ -2130,24 +2177,31 @@ function renderDB() {
   document.getElementById('bySt').innerHTML = renderStatusDonut(sts);
 
   // By Type + Profit
-  var tm = {}, ptm = {}, tcs = ['var(--acc)','var(--chart-ink)','var(--chart-muted)','var(--ts)','var(--tm)'];
+  var tm = {}, ptm = {}, claimedTm = {}, tcs = ['var(--acc)','var(--chart-ink)','var(--chart-muted)','var(--ts)','var(--tm)'];
   airdrops.forEach(function(a) { if(a.type) tm[a.type] = (tm[a.type]||0)+1; });
+  airdrops.forEach(function(a) { if(a.type && a.status === 'reclamado') claimedTm[a.type] = (claimedTm[a.type]||0)+1; });
   fa.forEach(function(a) { if(a.type) ptm[a.type] = (ptm[a.type]||0)+(a.profit||0); });
   var typeKeys = Object.keys(tm).sort(function(a,b){return tm[b]-tm[a];});
   var maxTypeVal = typeKeys.reduce(function(m,t){ return Math.max(m, Math.abs(ptm[t]||0), tm[t]); }, 1);
+  var maxTypeCount = typeKeys.reduce(function(m,t){ return Math.max(m, tm[t] || 0); }, 1);
   var typeProfitHtml = '<div class="type-profit-row type-profit-head">' +
     '<span>Tipo</span><span>Cant.</span><span>Profit</span><span>Chart</span>' +
   '</div>';
   typeKeys.forEach(function(t,i) {
     var val = ptm[t] || 0;
     var col = tcs[i%tcs.length];
-    var bw = Math.max(4, Math.round((Math.max(Math.abs(val), tm[t]) / maxTypeVal) * 100));
-    var vals = [tm[t], Math.abs(val)*.22, tm[t]*1.4, Math.abs(val)*.48, Math.max(Math.abs(val), tm[t])];
+    var totalCount = tm[t] || 0;
+    var claimedCount = claimedTm[t] || 0;
+    var totalW = Math.max(4, Math.round((totalCount / maxTypeCount) * 100));
+    var claimedW = totalCount ? Math.round((claimedCount / totalCount) * totalW) : 0;
     typeProfitHtml += '<div class="type-profit-row" onclick="goPageFilteredType(&quot;'+t+'&quot;)" title="Filtrar por '+t+'">' +
       '<span class="type-profit-name"><span class="legend-dot" style="background:'+col+'"></span><span>'+t+'</span></span>' +
-      '<span class="type-profit-count">'+tm[t]+'</span>' +
+      '<span class="type-profit-count">'+totalCount+'</span>' +
       '<span class="type-profit-val '+(val>=0?'up':'dn')+'">'+(val>=0?'+':'-')+fu(val)+'</span>' +
-      '<span class="type-profit-mini">'+tinyLineSvg(vals, val >= 0 ? 'var(--chart-ink)' : 'var(--rd)')+'</span>' +
+      '<span class="type-stack-bar" title="'+totalCount+' total · '+claimedCount+' reclamados">' +
+        '<span class="type-total-bar" style="width:'+totalW+'%"></span>' +
+        '<span class="type-claimed-bar" style="width:'+Math.max(claimedCount ? 3 : 0, claimedW)+'%"></span>' +
+      '</span>' +
     '</div>';
   });
   var typeProfitEl = document.getElementById('typeProfit');
